@@ -1,4 +1,4 @@
-{% set build = 3 %}
+{% set build = 4 %}
 {% set strbuild = "build_" + build|string %}
 {% set version = "3.3.2" %}
 
@@ -55,6 +55,7 @@ requirements:
     - gfortran_osx-64 {{ osxfortran }}       # [osx]
     - libclang {{ libclang }}                # [osx]
     - libcxx {{ libcxx }}                    # [osx]
+    - libcxxabi                              # [osx]
     - mpi 1.0 mpich
 test:
   script: run_test.sh
