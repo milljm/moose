@@ -1,15 +1,12 @@
 {% set build = 0 %}
-{% set version = "2020.04.13" %}
-
-{% set sha256 = "3a12dc808c116f6593f7c95519ed2410b3e61bde9c3b426a58c07c7f6a6dd4c2" %}
+{% set version = "2020.08.11" %}
 
 package:
   name: moose-tools
   version: {{ version }}
 
 source:
-  url: https://mooseframework.org/source_packages/moose-python-deps.tar.gz
-  sha256: {{ sha256 }}
+  path: .
 
 build:
   number: {{ build }}
@@ -39,8 +36,8 @@ requirements:
     - python {{ python }}
 
 test:
-  commands:
-    - test -f $PREFIX/share/moose-tools
+  imports:
+    - vtk
 
 about:
   home: https://mooseframework.org/
