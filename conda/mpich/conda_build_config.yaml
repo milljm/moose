@@ -35,7 +35,7 @@ clang:
   - 9.0.1 default_hf57f61e_0
 
 llvmopenmp:
-  - 9.0.1 h28b9765_2
+  - 10.0.1 h28b9765_0
 
 osxfortran:
   - 9.3.0 h268312c_9
@@ -53,7 +53,7 @@ gccimpl:
   - 9.3.0 hda68d29_13
 
 libcxx:
-  - 9.0.1 1
+  - 10.0.1 h5f48129_0
 
 moose_compilers:
   - 2020.10.07
