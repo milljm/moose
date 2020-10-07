@@ -32,10 +32,10 @@ requirements:
     - compiler-rt_osx-64 {{ compilerrtosx }} # [osx]
     - libllvm9 {{ libllvm }}                 # [osx]
     - clang-tools                            # [osx]
-    - llvm-openmp {{ llvmopenmp }}           # [osx]
+    #- llvm-openmp {{ llvmopenmp }}           # [osx]
     - gfortran_osx-64 {{ osxfortran }}       # [osx]
     - libclang {{ libclang }}                # [osx]
-    - libcxx {{ libcxx }}                    # [osx]
+    #- libcxx {{ libcxx }}                    # [osx]
     - make  # [unix]
   host: []
   run:
@@ -51,10 +51,10 @@ requirements:
     - compiler-rt_osx-64 {{ compilerrtosx }} # [osx]
     - libllvm9 {{ libllvm }}                 # [osx]
     - clang-tools                            # [osx]
-    - llvm-openmp {{ llvmopenmp }}           # [osx]
+    #- llvm-openmp {{ llvmopenmp }}           # [osx]
     - gfortran_osx-64 {{ osxfortran }}       # [osx]
     - libclang {{ libclang }}                # [osx]
-    - libcxx {{ libcxx }}                    # [osx]
+    #- libcxx {{ libcxx }}                    # [osx]
     - mpi 1.0 mpich
 test:
   script: run_test.sh

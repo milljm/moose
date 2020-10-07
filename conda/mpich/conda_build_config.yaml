@@ -40,20 +40,20 @@ llvmopenmp:
 osxfortran:
   - 9.3.0 h268312c_9
 
+libcxx:
+  - 10.0.1 h5f48129_0
+
 gcc:
   - 9.3.0 h7247604_29
 
 gxx:
-  - 9.3.0 ha9dd585_28
+  - 9.3.0 h0d07fa4_29
 
 fortran:
-  - 9.3.0 ha9dd585_28
+  - 9.3.0 ha1c937c_29
 
 gccimpl:
-  - 9.3.0 hda68d29_13
-
-libcxx:
-  - 10.0.1 h5f48129_0
+  - 9.3.0 h28f5a38_17
 
 moose_compilers:
   - 2020.10.07
