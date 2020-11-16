@@ -20,7 +20,7 @@ class TestHarnessTester(TestHarnessTestCase):
         """
 
         with self.assertRaises(subprocess.CalledProcessError) as cm:
-            self.runTests('-i', 'csv_validation_tester', '--no-color').decode('utf-8')
+            self.runTests('-i', 'csv_validation_tester', '--no-color').encode('utf-8')
 
         e = cm.exception
         output = e.output.decode('utf-8')
@@ -34,7 +34,7 @@ class TestHarnessTester(TestHarnessTestCase):
         """
 
         with self.assertRaises(subprocess.CalledProcessError) as cm:
-            self.runTests('-i', 'csv_validation_tester', '--verbose', '--no-color').decode('utf-8')
+            self.runTests('-i', 'csv_validation_tester', '--verbose', '--no-color').encode('utf-8')
 
         e = cm.exception
         output = e.output.decode('utf-8')
