@@ -159,7 +159,6 @@ if [ -z "$go_fast" ]; then
                                    --enable-unique-id \
                                    --disable-warnings \
                                    --enable-glibcxx-debugging \
-                                   --with-thread-model=openmp \
                                    --disable-maintainer-mode \
                                    --enable-petsc-hypre-required \
                                    --enable-metaphysicl-required \

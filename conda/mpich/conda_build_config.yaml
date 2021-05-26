@@ -1,47 +1,64 @@
-CONDA_BUILD_SYSROOT:           # [osx]
-  - /opt/MacOSX10.9.sdk        # [osx]
+CONDA_BUILD_SYSROOT:            # [osx]
+  - /opt/MacOSX10.9.sdk         # [not arm64]
+  - /opt/MacOSX11.1.sdk         # [arm64]
 
-macos_min_version:             # [osx]
-  - 10.9                       # [osx]
+macos_min_version:              # [osx]
+  - 10.9                        # [not arm64]
+  - 11.1                        # [arm64]
 
-macos_machine:                 # [osx]
-  - x86_64-apple-darwin13.4.0  # [osx]
+macos_machine:                  # [osx]
+  - x86_64-apple-darwin13.4.0   # [not arm64]
+  - arm64-apple-darwin20.0.0    # [arm64]
 
-MACOSX_DEPLOYMENT_TARGET:      # [osx]
-  - 10.9                       # [osx]
-
-libllvm:
-  - 11.0.0 hf85e3d2_0
-
-libclang:
-  - 11.0.0 default_h9e6edd0_2
-
-compilerrt:
-  - 11.0.0 h01488ec_2
-
-compilerrtosx:
-  - 11.0.0 hd3c4e95_2
-
-clangxx:
-  - 11.0.0 default_h9e6edd0_2
-
-clangosx:
-  - 11.0.0 hb91bd55_5
-
-clangxxosx:
-  - 11.0.0 h7e1b574_5
+MACOSX_DEPLOYMENT_TARGET:       # [osx]
+  - 10.9                        # [not arm64]
+  - 11.1                        # [arm64]
 
 clang:
-  - 11.0.0 h694c41f_2
+  - 11.0.0 h694c41f_2           # [not arm64]
+  - 11.0.0 hce30654_2           # [arm64]
 
-llvmopenmp:
-  - 11.0.0 h73239a0_1
-
-osxfortran:
-  - 7.3.0 h22b1bf0_7
+clangxx:
+  - 11.0.0 h54d7cd3_10          # [not arm64]
+  - 11.0.0 default_hbe4449c_2   # [arm64]
 
 libcxx:
-  - 11.0.0 h4c3b8ed_1
+  - 11.0.0 h4c3b8ed_1           # [not arm64]
+  - 11.0.0 h7cf67bf_1           # [arm64]
+
+libllvm:
+  - 11.0.0 hf85e3d2_0           # [not arm64]
+  - 11.0.0 h8522ed7_0           # [arm64]
+
+fortranosx:
+  - 7.3.0 h22b1bf0_7            # [not arm64]
+  - 11.0.1.dev0 h40eb566_14     # [arm64]
+
+libclangcpp11:
+  - 11.0.0 h223d4b2_0           # [not arm64]
+  - 11.0.0 default_h87665d4_2   # [arm64]
+
+llvmopenmp:
+  - 11.0.0 h73239a0_1           # [osx]
+  - 11.0.0 hdb94862_1           # [arm64]
+
+
+
+libclang:
+  - 11.0.0 default_h9e6edd0_2   # [osx]
+
+compilerrt:
+  - 11.0.0 h01488ec_2           # [osx]
+  - 11.0.0 h9316cab_2           # [arm64]
+
+compilerrtosx:
+  - 11.0.0 hd3c4e95_2           # [osx]
+
+compilerrtarm64:
+  - 11.0.0 hd64e075_2           # [arm64]
+
+osxfortranarm64:
+  - 11.0.0.dev0 h57527a5_13     # [arm64]
 
 gcc:
   - 9.3.0 h7247604_29
