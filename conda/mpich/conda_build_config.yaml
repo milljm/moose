@@ -165,28 +165,28 @@ zip_keys:
 
 #### Changes to the following require extensive testing
 libllvm:
-  - 12.0.1 hd011deb_0
+  - 11.1.0 hd011deb_2
 
 libclang:
-  - 12.0.1 default_he082bbe_0
+  - 11.1.0 default_he082bbe_1
 
 compilerrt:
-  - 12.0.1 he01351e_0
+  - 11.1.0 h654b07c_0
 
 compilerrtosx:
-  - 12.0.1 hd3f61c9_0
+  - 11.1.0 h8c5fa43_0
 
 clangxx:
-  - 12.0.1 default_he082bbe_0
+  - 11.1.0 default_he082bbe_1
 
 clangosx:
-  - 12.0.1 hb91bd55_0
+  - 11.1.0 hb91bd55_2
 
 clangxxosx:
-  - 12.0.1 h7e1b574_0
+  - 11.1.0 h7e1b574_2
 
 clang:
-  - 12.0.1 h694c41f_0
+  - 11.1.0 h694c41f_1
 
 llvmopenmp:
   - 12.0.1 hda6cdc1_0
@@ -195,7 +195,7 @@ osxfortran:
   - 9.3.0 h18f7dce_14
 
 libcxx:
-  - 12.0.1 habf9029_0
+  - 11.1.0 habf9029_0
 
 gcc:
   - 9.3.0 h7247604_29
@@ -219,7 +219,7 @@ liblapack:
   - 3.9.0 8_openblas
 
 libopenblas:
-  - 0.3.12 openmp_h63d9170_1
+  - 0.3.12 openmp_h54245bb_1
 
 libglu:
   - 9.0.0 hf484d3e_1000
