@@ -189,7 +189,7 @@ clang:
   - 11.1.0 h694c41f_1
 
 llvmopenmp:
-  - 12.0.1 hda6cdc1_0
+  - 11.1.0 hda6cdc1_1
 
 osxfortran:
   - 9.3.0 h18f7dce_14
@@ -210,16 +210,16 @@ gccimpl:
   - 9.3.0 h28f5a38_17
 
 libblas:
-  - 3.9.0 8_openblas
+  - 3.9.0 10_openblas
 
 libcblas:
-  - 3.9.0 8_openblas
+  - 3.9.0 10_openblas
 
 liblapack:
-  - 3.9.0 8_openblas
+  - 3.9.0 10_openblas
 
 libopenblas:
-  - 0.3.12 openmp_h54245bb_1
+  - 0.3.17 openmp_h3351f45_1
 
 libglu:
   - 9.0.0 hf484d3e_1000
