@@ -182,33 +182,38 @@ zip_keys:
 #### Changes to the following require extensive testing
 moose_clang:
   - 11.1.0 h694c41f_1         # [not arm64 and osx]
-  - 11.1.0 hce30654_1         # [arm64]
+  - 12.0.1 hce30654_0         # [arm64]
+
+moose_clang12:                # [arm64]
+  - 12.0.1 default_h0fdd720_0 # [arm64]
 
 moose_clangxx:
   - 11.1.0 default_he082bbe_1 # [not arm64 and osx]
-  - 11.1.0 default_h8b1a7b7_1 # [arm64]
+  - 12.0.1 default_h8b1a7b7_0 # [arm64]
 
 moose_clangosx:
   - 11.1.0 hb91bd55_2         # [not arm64 and osx]
-  - 11.1.0 ha77c5c3_0         # [arm64]
+  - 12.0.1 ha77c5c3_0         # [arm64]
 
 moose_clangosx_arm:           # [arm64]
-  - 11.1.0 h54d7cd3_3         # [arm64]
+  - 12.0.1 h54d7cd3_0         # [arm64]
 
 moose_clangxxosx:
   - 11.1.0 h7e1b574_2         # [not arm64 and osx]
-  - 11.1.0 h8d3ee1a_3         # [arm64]
+  - 12.0.1 h8d3ee1a_0         # [arm64]
 
 moose_clangxxosx_arm:         # [arm64]
-  - 11.1.0 hb84c830_0         # [arm64]
+  - 12.0.1 hb84c830_0         # [arm64]
 
 moose_compilerrt:
   - 11.1.0 h654b07c_0         # [not arm64 and osx]
-  - 11.1.0 h7d99272_0         # [arm64]
+  - 12.0.1 h94c6b0c_0         # [arm64]
 
-moose_compilerrtosx:
+moose_compilerrtosx:          # [not arm64 and osx]
   - 11.1.0 h8c5fa43_0         # [not arm64 and osx]
-  - 11.1.0 h103ad0d_0         # [arm64]
+
+moose_compilerrtosx_arm:      # [arm64]
+  - 12.0.1 h44bac85_0         # [arm64]
 
 moose_osxfortran:
   - 7.3.0 h22b1bf0_11         # [not arm64 and osx]
@@ -216,22 +221,21 @@ moose_osxfortran:
 
 moose_libclang:
   - 11.1.0 default_he082bbe_1 # [not arm64 and osx]
-  - 11.1.0 default_h0fdd720_1 # [arm64]
+  - 12.0.1 default_h0fdd720_0 # [arm64]
 
 moose_libcxx:
   - 11.1.0 habf9029_0         # [not arm64 and osx]
-  - 11.1.0 h168391b_0         # [arm64]
+  - 12.0.1 h168391b_0         # [arm64]
 
-moose_libllvm11:
+moose_libllvm11:              # [not arm64 and osx]
   - 11.1.0 hd011deb_2         # [not arm64 and osx]
-  - 11.1.0 h93073aa_2         # [arm64]
 
 moose_libllvm12:              # [arm64]
   - 12.0.1 h93073aa_2         # [arm64]
 
 moose_llvmopenmp:
   - 11.1.0 hda6cdc1_1         # [not arm64 and osx]
-  - 11.1.0 hf3c4609_1         # [arm64]
+  - 12.0.1 hf3c4609_1         # [arm64]
 
 moose_gcc:
   - 9.3.0 h7247604_29
