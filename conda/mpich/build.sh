@@ -1,5 +1,7 @@
 #!/bin/bash
 set -eu
+export PATH=/bin:$PATH
+
 export CC=$(basename "$CC")
 export CXX=$(basename "$CXX")
 export FC=$(basename "$FC")

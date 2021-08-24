@@ -46,7 +46,7 @@ moose_numpy:
   - 1.21.0 py39hdbf815f_0      # [linux]
   - 1.21.0 py38h9894fe3_0      # [linux]
   - 1.21.0 py37h038b26d_0      # [linux]
-  - 1.19.5 py36h2aa4a07_1      # [linux]  
+  - 1.19.5 py36h2aa4a07_1      # [linux]
   - 1.21.2 py39h1f3b974_0      # [arm64]
   - 1.21.2 py38hbf7bb01_0      # [arm64]
 
@@ -179,91 +179,63 @@ zip_keys:
   - moose_scikit_image
 
 
-#### Changes to the following require extensive testing
-moose_clang:
-  - 11.1.0 h694c41f_1         # [not arm64 and osx]
-  - 12.0.1 hce30654_0         # [arm64]
+#### Compilers
+cc_compiler:                                   # [unix]
+  - gcc_linux-64 9.3.0 h7247604_29             # [linux]
+  - clang_osx-64 11.1.0 hb91bd55_3             # [not arm64 and osx]
+  - clang_osx-arm64 12.0.1 h54d7cd3_0          # [arm64]
+ #- clang_osx-arm64 11.0.1 h54d7cd3_2          # [arm64]
 
-moose_clang12:                # [arm64]
-  - 12.0.1 default_h0fdd720_0 # [arm64]
+cxx_compiler:                                  # [unix]
+  - gxx_linux-64 9.3.0 h0d07fa4_29             # [linux]
+  - clangxx_osx-64 11.1.0 h7e1b574_3           # [not arm64 and osx]
+  - clangxx_osx-arm64 12.0.1 hb84c830_0        # [arm64]
+ #- clangxx_osx-arm64 11.0.1 hb84c830_2        # [arm64]
 
-moose_clangxx:
-  - 11.1.0 default_he082bbe_1 # [not arm64 and osx]
-  - 12.0.1 default_h8b1a7b7_0 # [arm64]
+fortran_compiler:                              # [unix]
+  - gfortran_linux-64 9.3.0 ha1c937c_29        # [linux]
+  - gfortran_osx-64 7.3.0 h22b1bf0_11          # [not arm64 and osx]
+  - gfortran_osx-arm64 11.0.1.dev0 h57527a5_14 # [arm64]
+ #- gfortran_osx-arm64 11.0.0.dev0 h57527a5_13 # [arm64]
 
-moose_clangosx:
-  - 11.1.0 hb91bd55_2         # [not arm64 and osx]
-  - 12.0.1 ha77c5c3_0         # [arm64]
+moose_libcxx:                                  # [osx]
+  - libcxx 11.0.0 h7cf67bf_1                   # [not arm64 and osx]
+  - libcxx 12.0.1 h168391b_0                   # [arm64]
+ #- libcxx 11.0.1 h168391b_0                   # [arm64]
 
-moose_clangosx_arm:           # [arm64]
-  - 12.0.1 h54d7cd3_0         # [arm64]
+moose_openmp:                                  # [osx]
+  - llvm-openmp 12.0.1 hf3c4609_1              # [arm64]
+ #- llvm-openmp 11.0.1 hb3022d6_0              # [arm64]
 
-moose_clangxxosx:
-  - 11.1.0 h7e1b574_2         # [not arm64 and osx]
-  - 12.0.1 h8d3ee1a_0         # [arm64]
+moose_llvm_tools:                              # [osx]
+  - llvm-tools 12.0.1 h93073aa_2               # [arm64]
+ #- llvm-tools 11.0.1 h4468dd5_0               # [arm64]
 
-moose_clangxxosx_arm:         # [arm64]
-  - 12.0.1 hb84c830_0         # [arm64]
+moose_cctools:                                 # [osx]
+  - cctools_osx-arm64 973.0.1 h92b3a8a_0       # [arm64]
+ #- cctools_osx-arm64 949.0.1 h1c8944f_18      # [arm64]
 
-moose_compilerrt:
-  - 11.1.0 h654b07c_0         # [not arm64 and osx]
-  - 12.0.1 h94c6b0c_0         # [arm64]
+moose_ld64:                                    # [osx]
+  - ld64_osx-arm64 609 ha291f0b_0              # [arm64]
+ #- ld64_osx-arm64 530 h42e8ac5_15             # [arm64]
 
-moose_compilerrtosx:          # [not arm64 and osx]
-  - 11.1.0 h8c5fa43_0         # [not arm64 and osx]
 
-moose_compilerrtosx_arm:      # [arm64]
-  - 12.0.1 h44bac85_0         # [arm64]
+#### Support Libraries (PETSc, libMesh)
+moose_libblas:                                 # [osx]
+  - 3.9.0 8_openblas                           # [not arm64 and osx]
+  - 3.9.0 11_osxarm64_openblas                 # [arm64]
 
-moose_osxfortran:
-  - 7.3.0 h22b1bf0_11         # [not arm64 and osx]
-  - 11.0.1.dev0 h57527a5_14   # [arm64]
+moose_libcblas:                                # [osx]
+  - 3.9.0 8_openblas                           # [not arm64 and osx]
+  - 3.9.0 11_osxarm64_openblas                 # [arm64]
 
-moose_libclang:
-  - 11.1.0 default_he082bbe_1 # [not arm64 and osx]
-  - 12.0.1 default_h0fdd720_0 # [arm64]
+moose_liblapack:                               # [osx]
+  - 3.9.0 8_openblas                           # [not arm64 and osx]
+  - 3.9.0 11_osxarm64_openblas                 # [arm64]
 
-moose_libcxx:
-  - 11.1.0 habf9029_0         # [not arm64 and osx]
-  - 12.0.1 h168391b_0         # [arm64]
-
-moose_libllvm11:              # [not arm64 and osx]
-  - 11.1.0 hd011deb_2         # [not arm64 and osx]
-
-moose_libllvm12:              # [arm64]
-  - 12.0.1 h93073aa_2         # [arm64]
-
-moose_llvmopenmp:
-  - 11.1.0 hda6cdc1_1         # [not arm64 and osx]
-  - 12.0.1 hf3c4609_1         # [arm64]
-
-moose_gcc:
-  - 9.3.0 h7247604_29
-
-moose_gxx:
-  - 9.3.0 h0d07fa4_29
-
-moose_fortran:
-  - 9.3.0 ha1c937c_29
-
-moose_gccimpl:
-  - 9.3.0 h28f5a38_17
-
-moose_libblas:
-  - 3.9.0 8_openblas           # [not arm64 and osx]
-  - 3.9.0 11_osxarm64_openblas # [arm64]
-
-moose_libcblas:
-  - 3.9.0 8_openblas           # [not arm64 and osx]
-  - 3.9.0 11_osxarm64_openblas # [arm64]
-
-moose_liblapack:
-  - 3.9.0 8_openblas           # [not arm64 and osx]
-  - 3.9.0 11_osxarm64_openblas # [arm64]
-
-moose_libopenblas:
-  - 0.3.12 openmp_h63d9170_1   # [not arm64 and osx]
-  - 0.3.17 openmp_h5dd58f0_1   # [arm64]
+moose_libopenblas:                             # [osx]
+  - 0.3.12 openmp_h63d9170_1                   # [not arm64 and osx]
+  - 0.3.17 openmp_h5dd58f0_1                   # [arm64]
 
 moose_libglu:
   - 9.0.0 hf484d3e_1000
@@ -271,12 +243,12 @@ moose_libglu:
 moose_mesalib:
   - 18.3.1 h590aaf7_0
 
-moose_libpng:
-  - 1.6.37 h7cec526_2          # [not arm64 and osx]
-  - 1.6.37 hed695b0_2          # [linux]
-  - 1.6.37 hf7e6567_2          # [arm64]
+moose_libpng:                                  # [unix]
+  - 1.6.37 h7cec526_2                          # [not arm64 and osx]
+  - 1.6.37 hed695b0_2                          # [linux]
+  - 1.6.37 hf7e6567_2                          # [arm64]
 
-# You simply _never_ change the following
+#### build/run pining
 mpi:
   - moose-mpich
 
@@ -289,18 +261,19 @@ pin_run_as_build:
   moose_libmesh_vtk: x.x.x
   moose_python: x.x
 
-CONDA_BUILD_SYSROOT:
-  - /opt/MacOSX10.9.sdk        # [not arm64 and osx]
-  - /opt/MacOSX11.0.sdk        # [arm64]
+#### Darwin SDK SYSROOT
+CONDA_BUILD_SYSROOT:                           # [osx]
+  - /opt/MacOSX10.9.sdk                        # [not arm64 and osx]
+  - /opt/MacOSX11.0.sdk                        # [arm64]
 
-macos_min_version:
-  - 10.9                       # [not arm64 and osx]
-  - 11.0                       # [arm64]
+macos_min_version:                             # [osx]
+  - 10.9                                       # [not arm64 and osx]
+  - 11.0                                       # [arm64]
 
-macos_machine:
-  - x86_64-apple-darwin13.4.0  # [not arm64 and osx]
-  - arm64-apple-darwin20.0.0   # [arm64]
+macos_machine:                                 # [osx]
+  - x86_64-apple-darwin13.4.0                  # [not arm64 and osx]
+  - arm64-apple-darwin20.0.0                   # [arm64]
 
-MACOSX_DEPLOYMENT_TARGET:
-  - 10.9                       # [not arm64 and osx]
-  - 11.0                       # [arm64]
+MACOSX_DEPLOYMENT_TARGET:                      # [osx]
+  - 10.9                                       # [not arm64 and osx]
+  - 11.0                                       # [arm64]
