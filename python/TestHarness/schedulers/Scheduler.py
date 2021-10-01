@@ -81,6 +81,9 @@ class Scheduler(MooseObject):
         # Job lock when modifying a jobs status
         self.activity_lock = threading.Lock()
 
+        # Waiting job lock
+        self.waiting_lock = threading.Lock()
+
         # A combination of processors + threads (-j/-n) currently in use, that a job requires
         self.slots_in_use = 0
 
@@ -98,6 +101,9 @@ class Scheduler(MooseObject):
 
         # Private set of jobs currently running
         self.__active_jobs = set([])
+
+        # Set of waiting jobs
+        self.__waiting_jobs = set([])
 
         # Jobs that are taking longer to finish than the alloted time are reported back early to inform
         # the user 'stuff' is still running. Jobs entering this set will not be reported again.
@@ -279,6 +285,15 @@ class Scheduler(MooseObject):
         while self.slots_in_use > 1 and self.getLoad() >= self.average_load:
             sleep(1.0)
 
+    def recoverSlots(self, slots):
+        with self.slot_lock:
+            self.slots_in_use = max(0, (self.slots_in_use - slots))
+        for job in range(slots):
+            if self.__waiting_jobs:
+                with self.waiting_lock:
+                    job, Jobs, j_lock = self.__waiting_jobs.pop()
+                self.runJob(job, Jobs, j_lock)
+
     def reserveSlots(self, job, j_lock):
         """
         Method which allocates resources to perform the job. Returns bool if job
@@ -420,8 +435,7 @@ class Scheduler(MooseObject):
                 timeout_timer.cancel()
 
                 # Recover worker count before attempting to queue more jobs
-                with self.slot_lock:
-                    self.slots_in_use = max(0, self.slots_in_use - job.getSlots())
+                self.recoverSlots(1)
 
                 # Stop the long running timer
                 job.report_timer.cancel()
@@ -435,14 +449,15 @@ class Scheduler(MooseObject):
 
             # Not enough slots to run the job...
             else:
-                # ...currently, place back on hold before placing it back into the queue
+                # Place on hold
                 if not job.isFinished():
-                    with j_lock:
-                        job.setStatus(job.hold)
-                    sleep(.1)
+                    with self.waiting_lock:
+                        self.__waiting_jobs.add((job, Jobs, j_lock))
+                    return
 
-            # Job is done (or needs to re-enter the queue)
+            # Job is done, there may be more within this DAG
             self.queueJobs(Jobs, j_lock)
+            return
 
         except Exception:
             print('runWorker Exception: %s' % (traceback.format_exc()))

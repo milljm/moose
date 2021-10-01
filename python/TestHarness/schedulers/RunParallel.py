@@ -35,6 +35,10 @@ class RunParallel(Scheduler):
         # Launch and wait for the command to finish
         job.run()
 
+        # Recover parallel jobs and leave one for post processing
+        if job.getSlots() > 1:
+            Scheduler.recoverSlots(self, job.getSlots() - 1)
+
         # Was this job already considered finished? (Timeout, Crash, etc)
         if job.isFinished():
             return
