@@ -17,7 +17,7 @@ unset CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS LDFLAGS
 if [[ $(uname) == Darwin ]]; then
     if [[ $HOST == arm64-apple-darwin20.0.0 ]]; then
         LDFLAGS="-Wl,-rpath,$PREFIX/lib"
-        CTUNING="-march=apple-a12"
+        CTUNING="-mcpu=apple-a12"
         FTUNING="-march=armv8.3-a"
     else
         CTUNING="-march=core2 -mtune=haswell"
@@ -37,6 +37,7 @@ export FPATH_INCLUDE_PATH=$PREFIX/include
 
 source $PETSC_DIR/configure_petsc.sh
 configure_petsc \
+       --download-slepc=0 \
        --COPTFLAGS=-O3 \
        --CXXOPTFLAGS=-O3 \
        --FOPTFLAGS=-O3 \
