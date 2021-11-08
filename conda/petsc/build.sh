@@ -13,21 +13,38 @@ elif [[ $mpi == "moose-mpich" ]]; then
   export HYDRA_LAUNCHER=fork
 fi
 
-unset CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS LDFLAGS
-if [[ $(uname) == Darwin ]]; then
-    if [[ $HOST == arm64-apple-darwin20.0.0 ]]; then
-        LDFLAGS="-Wl,-rpath,$PREFIX/lib"
-        CTUNING="-mcpu=apple-a12"
-        FTUNING="-march=armv8.3-a"
-    else
-        CTUNING="-march=core2 -mtune=haswell"
-        FTUNING="-I$PREFIX/include"
-    fi
-    LDFLAGS="${LDFLAGS:-} -Wl,-headerpad-max-install-names"
-    export LIBRARY_PATH="$PREFIX/lib"
+if [[ $HOST == arm64-apple-darwin20.0.0 ]]; then
+    BUILD_CONFIG=`cat <<"EOF"
+--AR=${AR} \
+--RANLIB=${RANLIB} \
+--CFLAGS=${CFLAGS} -mcpu=apple-a12 \
+--CXXFLAGS=${CXXFLAGS} -mcpu=apple-a12 \
+--CPPFLAGS=${CPPFLAGS} \
+--FFLAGS=${FFLAGS} -march=armv8.3-a \
+--FCFLAGS=${FFLAGS} -march=armv8.3-a \
+--LDFLAGS=${LDFLAGS} \
+--with-shared-libraries=0 \
+EOF
+`
+elif [[ $(uname) == Darwin ]]; then
+    BUILD_CONFIG=`cat <<"EOF"
+--CFLAGS=-march=core2 -mtune=haswell \
+--CXXFLAGS=-march=core2 -mtune=haswell \
+--FFLAGS=-I$PREFIX/include \
+--FCFLAGS=-I$PREFIX/include \
+--LDFLAGS=-Wl,-headerpad-max-install-names \
+--with-shared-libraries=1 \
+EOF
+`
 else
-    CTUNING="-march=nocona -mtune=haswell"
-    FTUNING="-I$PREFIX/include"
+    BUILD_CONFIG=`cat <<"EOF"
+--CFLAGS=-march=nocona -mtune=haswell \
+--CXXFLAGS=-march=nocona -mtune=haswell \
+--FFLAGS=-I$PREFIX/include \
+--FCFLAGS=-I$PREFIX/include \
+--with-shared-libraries=1 \
+EOF
+`
 fi
 
 # for MPI discovery
@@ -43,17 +60,12 @@ configure_petsc \
        --FOPTFLAGS=-O3 \
        --with-x=0 \
        --with-ssl=0 \
-       AR="${AR:-ar}" \
        CC="mpicc" \
        CXX="mpicxx" \
        FC="mpifort" \
        F90="mpifort" \
        F77="mpifort" \
-       CFLAGS="${CTUNING}" \
-       CXXFLAGS="${CTUNING}" \
-       FFLAGS="${FTUNING}" \
-       FCFLAGS="${FTUNING}" \
-       LDFLAGS="${LDFLAGS:-}" \
+       ${BUILD_CONFIG} \
        --prefix=$PREFIX \
        $* || (cat configure.log && exit 1)
 

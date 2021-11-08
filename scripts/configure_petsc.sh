@@ -28,7 +28,6 @@ function configure_petsc()
   cd $PETSC_DIR
   python ./configure --download-hypre=1 \
       --with-debugging=no \
-      --with-shared-libraries=1 \
       --download-fblaslapack=1 \
       --download-metis=1 \
       --download-ptscotch=1 \
