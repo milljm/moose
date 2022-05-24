@@ -1,0 +1,50 @@
+{% set version = "2.9.1" %}
+{% set build = 0 %}
+{% set strbuild = "build_" + build|string %}
+{% set sha256 = "ea566e528605befb830671e359118c2da718f721c27225cbbc93858c7520fee3" %}
+
+package:
+  name: moose-gperftools
+  version: {{ version }}
+
+source:
+  fn: gperftools-{{ version }}.tar.gz
+  url: https://github.com/gperftools/gperftools/releases/download/gperftools-{{ version }}/gperftools-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: {{ build }}
+  string: {{ strbuild }}
+  skip: true  # [win]
+
+requirements:
+  build:
+    - make
+    - {{ pin_compatible('moose-libunwind', max_pin='x.x') }}  # [linux]
+    - {{ moose_mpich }}
+    - moose-libunwind
+    - sysroot_linux-64 2.17  # [linux64]
+    - gnuconfig  # [unix]
+    - go
+  run:
+    - {{ moose_mpich }}
+    - moose-libunwind
+    - go
+    - perl
+
+about:
+  home: https://github.com/gperftools/gperftools
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file: COPYING
+  summary: 'The fastest malloc we have seen; works particularly well with threads and STL'
+  description: |
+    gperftools is a collection of a high-performance multi-threaded
+    malloc() implementation, plus some pretty nifty performance analysis
+    tools.
+  doc_url: https://github.com/gperftools/gperftools/wiki
+  dev_url: https://github.com/gperftools/gperftools
+
+extra:
+  recipe-maintainers:
+    - milljm
