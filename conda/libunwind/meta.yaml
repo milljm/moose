@@ -1,0 +1,46 @@
+{% set version = "1.6.2" %}
+{% set build = 0 %}
+{% set strbuild = "build_" + build|string %}
+package:
+  name: moose-libunwind
+  version: {{ version }}
+
+source:
+  url: http://download.savannah.nongnu.org/releases/libunwind/libunwind-{{ version }}.tar.gz
+  sha256: 4a6aec666991fb45d0889c44aede8ad6eb108071c3554fcdff671f9c94794976
+
+build:
+  number: {{ build }}
+  string: {{ strbuild }}
+  skip: true  # [win or osx]
+  ignore_run_exports_from:
+    - {{ moose_mpich }}
+  pin_depends: record
+
+requirements:
+  build:
+    - {{ moose_mpich }}
+    - make
+    - autoconf
+    - automake
+    - libtool
+  run:
+    - xz
+
+test:
+  commands:
+    - test -f "${PREFIX}/include/libunwind.h"
+    - test -f "${PREFIX}/include/unwind.h"
+
+about:
+  home: https://www.nongnu.org/libunwind
+  license: MIT
+  license_family: MIT
+  license_file: COPYING
+  summary: Defines a portable and efficient C programming interface (API) to determine the call-chain of a program
+  dev_url: https://github.com/libunwind/libunwind
+  doc_url: https://www.nongnu.org/libunwind/docs.html
+
+extra:
+  recipe-maintainers:
+    - milljm
