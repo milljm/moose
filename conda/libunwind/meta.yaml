@@ -12,14 +12,11 @@ source:
 build:
   number: {{ build }}
   string: {{ strbuild }}
-  run_exports:
-    - {{ pin_subpackage('moose-libunwind', max_pin='x.x') }}
-  skip: true  # [win]
+  skip: true  # [win or osx]
 
 requirements:
   build:
-    - {{ base_mpicc }}
-    - {{ base_mpicxx }}
+    - {{ moose_mpich }}
     - make
     - autoconf
     - automake

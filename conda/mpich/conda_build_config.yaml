@@ -25,6 +25,12 @@ moose_libmesh_vtk:
 moose_petsc:
   - moose-petsc 3.16.5 build_3
 
+moose_gperftools:
+  - moose_gperftools 2.9.1 build_0
+
+moose_libunwind:
+  - moose-libunwind 1.6.2 build_0
+
 moose_mpich:
   - moose-mpich 4.0.1 build_2
 
