@@ -20,17 +20,18 @@ build:
 requirements:
   build:
     - make
-    - {{ base_mpicc }}
-    - {{ base_mpicxx }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - {{ moose_libunwind }}                                   # [linux]
     - sysroot_linux-64 2.17                                   # [linux64]
     - gnuconfig                                               # [unix]
     - go
   run:
-    - {{ moose_mpich }}
-    - {{ moose_libunwind }}                                   # [linux]
-    - go
     - perl
+
+test:
+  commands:
+    - pprof --help
 
 about:
   home: https://github.com/gperftools/gperftools
