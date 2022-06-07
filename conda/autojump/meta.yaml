@@ -14,11 +14,14 @@ source:
 build:
   number: {{ build }}
   string: {{ strbuild }}
+  noarch: python
   skip: true # [win]
 
 requirements:
   build:
     - python=>3.7
+  run:
+    - python
 
 test:
   commands:

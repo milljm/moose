@@ -11,6 +11,6 @@ if [ -f ${PREFIX}/share/autojump/autojump.\${AUTOJUMP_SHELL} ]; then
 fi
 EOF
 cat <<EOF > "${PREFIX}/etc/conda/deactivate.d/deactivate_${PKG_NAME}.sh"
-unset -f j autojump_chpwd jco jo jc
+unset -f j autojump_chpwd jco jo jc 2>/dev/null
 unset AUTOJUMP_SOURCED
 EOF
