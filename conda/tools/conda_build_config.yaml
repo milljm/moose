@@ -1,1 +1,4 @@
-../mpich/conda_build_config.yaml
+moose_python:
+  - python 3.9
+  - python 3.8
+  - python 3.7                                             # [not arm64]

@@ -12,6 +12,3 @@ export CXX=$(mpicxx -show | cut -d\  -f1)
 CORES=${MOOSE_JOBS:-2}
 make -j${CORES}
 make install
-
-# The tests are known to be flakey so disable them
-# make check || true

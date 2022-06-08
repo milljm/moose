@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eu
+exit 0
 export PATH=/bin:$PATH
 
 export PETSC_DIR=$SRC_DIR

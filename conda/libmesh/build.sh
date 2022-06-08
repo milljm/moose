@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eu
+exit 0
 export PATH=/bin:$PATH
 
 export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
@@ -76,7 +77,7 @@ source $SRC_DIR/configure_libmesh.sh
 export INSTALL_BINARY="${SRC_DIR}/build-aux/install-sh -C"
 LIBMESH_DIR=${PREFIX}/libmesh \
   configure_libmesh --with-vtk-lib=${BUILD_PREFIX}/libmesh-vtk/lib \
-                    --with-vtk-include=${BUILD_PREFIX}/libmesh-vtk/include/vtk-${SHORT_VTK_NAME} \
+                    --with-vtk-include=${BUILD_PREFIX}/libmesh-vtk/include/vtk-${vtk_friendly_version} \
                     $*
 
 CORES=${MOOSE_JOBS:-2}
