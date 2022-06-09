@@ -38,17 +38,15 @@ requirements:
     - moose-petsc
     - moose-libmesh-vtk
     - pkg-config
-    - openssl <3
-    - setuptools <60
 
-#test:
-#  commands:
-#    - test -f $PREFIX/libmesh/lib/libmesh_opt.dylib     # [osx]
-#    - test -f $PREFIX/libmesh/lib/libmesh_opt.so        # [linux]
-#    - test -f $PREFIX/libmesh/lib/libmetaphysicl.dylib  # [osx]
-#    - test -f $PREFIX/libmesh/lib/libmetaphysicl.so     # [linux]
-#    - test -f $PREFIX/libmesh/lib/libtimpi_opt.dylib    # [osx]
-#    - test -f $PREFIX/libmesh/lib/libtimpi_opt.so       # [linux]
+test:
+  commands:
+    - test -f $PREFIX/libmesh/lib/libmesh_opt.dylib     # [osx]
+    - test -f $PREFIX/libmesh/lib/libmesh_opt.so        # [linux]
+    - test -f $PREFIX/libmesh/lib/libmetaphysicl.dylib  # [osx]
+    - test -f $PREFIX/libmesh/lib/libmetaphysicl.so     # [linux]
+    - test -f $PREFIX/libmesh/lib/libtimpi_opt.dylib    # [osx]
+    - test -f $PREFIX/libmesh/lib/libtimpi_opt.so       # [linux]
 
 about:
   home: http://libmesh.github.io/

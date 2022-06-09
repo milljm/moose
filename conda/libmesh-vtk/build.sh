@@ -1,6 +1,5 @@
 #!/bin/bash
 set -eu
-exit 0
 export PATH=/bin:$PATH
 export HYDRA_LAUNCHER=fork
 

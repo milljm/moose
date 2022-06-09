@@ -19,7 +19,7 @@ build:
     - sysroot_linux-64          # [linux]
     - python
     - krb5
-    - libzlib
+    - zlib
 
 requirements:
   build:
@@ -29,6 +29,9 @@ requirements:
     - {{ base_mpifort }}
     - {{ moose_hdf5 }}
     - {{ moose_ld64 }}          # [osx]
+    - pkg-config
+    - openssl <3
+    - setuptools <60
   host:
     - kernel-headers_linux-64   # [linux]
     - autoconf                  # [unix]

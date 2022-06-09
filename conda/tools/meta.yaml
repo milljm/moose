@@ -10,13 +10,11 @@ source:
 
 build:
   number: {{ build }}
+  pin_depends: strict
 
 requirements:
   build:
     - {{ moose_python }}
-  pin_depends: strict
-  ignore_run_exports:
-    - moose-mpich
 
   run:
     - moose-mpich

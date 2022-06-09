@@ -1,6 +1,5 @@
 #!/bin/bash
 set -eu
-exit 0
 export PATH=/bin:$PATH
 
 export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
