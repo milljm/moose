@@ -64,13 +64,7 @@ else
     export LDFLAGS="-Wl,-S"
 fi
 
-if [[ $mpi == "openmpi" ]]; then
-  export OMPI_MCA_plm=isolated
-  export OMPI_MCA_rmaps_base_oversubscribe=yes
-  export OMPI_MCA_btl_vader_single_copy_mechanism=none
-elif [[ $mpi == "moose-mpich" ]]; then
-  export HYDRA_LAUNCHER=fork
-fi
+export HYDRA_LAUNCHER=fork
 
 source $SRC_DIR/configure_libmesh.sh
 export INSTALL_BINARY="${SRC_DIR}/build-aux/install-sh -C"
