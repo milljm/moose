@@ -1,6 +1,6 @@
-{% set build = 3 %}
+{% set build = 0 %}
 {% set strbuild = "build_" + build|string %}
-{% set version = "4.0.1" %}
+{% set version = "4.0.2" %}
 
 package:
   name: moose-mpich
@@ -14,6 +14,8 @@ build:
   string: {{ strbuild }}
   skip: True                    # [win]
   pin_depends: strict
+  run_exports:
+    - {{ pin_subpackage('moose-mpich', max_pin='x.x') }}
 
 requirements:
   build:
@@ -23,9 +25,9 @@ requirements:
     - {{ base_mpifort }}
     - {{ moose_hdf5 }}
     - {{ moose_ld64 }}          # [osx]
+    - kernel-headers_linux-64   # [linux]
     - openssl <3
   host:
-    - kernel-headers_linux-64   # [linux]
     - autoconf                  # [unix]
     - automake                  # [unix]
     - libtool                   # [unix]

@@ -21,16 +21,16 @@ build:
 
 requirements:
   build:
+    - {{ moose_python }}
     - moose-mpich
     - openssl <3
-  host:
-    - {{ moose_python }}
     - pyqt               # [not arm64]
+  host:
     - cmake
     - ninja
   run:
-    - moose-mpich
     - {{ moose_python }}
+    - moose-mpich
     - pyqt               # [not arm64]
 
 test:
