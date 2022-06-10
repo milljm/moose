@@ -1,7 +1,5 @@
 #!/bin/bash
 set -eu
-touch ${PREFIX}/bin/libmesh-vtk_placeholder.txt
-exit 0
 export PATH=/bin:$PATH
 export HYDRA_LAUNCHER=fork
 

@@ -50,9 +50,9 @@ requirements:
     - openssl <3
     - mpi 1.0 mpich
 
-#test:
-#  commands:
-#    - test -f $PREFIX/etc/conda/activate.d/activate_moose-mpich.sh
+test:
+  commands:
+    - test -f $PREFIX/etc/conda/activate.d/activate_moose-mpich.sh
 
 about:
   home: https://mooseframework.org/
