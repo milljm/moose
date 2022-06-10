@@ -1,5 +1,7 @@
 #!/bin/bash
 set -eu
+touch ${PREFIX}/bin/libmesh_placeholder.txt
+exit 0
 export PATH=/bin:$PATH
 
 export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH

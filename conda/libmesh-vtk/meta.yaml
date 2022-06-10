@@ -18,11 +18,12 @@ build:
   script_env:
     - MOOSE_JOBS
     - vtk_friendly_version={{ vtk_friendly_version }}
-  pin_depends: strict
 
 requirements:
-  host:
+  build:
     - moose-mpich
+    - openssl <3
+  host:
     - {{ moose_python }}
     - pyqt               # [not arm64]
     - cmake
@@ -32,13 +33,13 @@ requirements:
     - {{ moose_python }}
     - pyqt               # [not arm64]
 
-test:
-  commands:
-    - test -f $PREFIX/libmesh-vtk/lib/libvtkCommonCore-{{ vtk_friendly_version }}.dylib # [osx]
-    - test -f $PREFIX/libmesh-vtk/lib/libvtkCommonCore-{{ vtk_friendly_version }}.so    # [linux]
-  imports:
-    - PyQt5              # [not arm64]
-    - vtk
+#test:
+#  commands:
+#    - test -f $PREFIX/libmesh-vtk/lib/libvtkCommonCore-{{ vtk_friendly_version }}.dylib # [osx]
+#    - test -f $PREFIX/libmesh-vtk/lib/libvtkCommonCore-{{ vtk_friendly_version }}.so    # [linux]
+#  imports:
+#    - PyQt5              # [not arm64]
+#    - vtk
 
 about:
   home: http://www.vtk.org/

@@ -19,13 +19,12 @@ build:
   script_env:
     - MOOSE_JOBS
     - vtk_friendly_version={{ vtk_friendly_version }}
-  pin_depends: strict
 
 requirements:
   build:
     - moose-mpich
-    - moose-libmesh-vtk
     - moose-petsc
+    - moose-libmesh-vtk
   host:
     - libtool                                           # [arm64]
     - autoconf                                          # [arm64]
@@ -39,19 +38,21 @@ requirements:
     - moose-libmesh-vtk
     - pkg-config
 
-test:
-  commands:
-    - test -f $PREFIX/libmesh/lib/libmesh_opt.dylib     # [osx]
-    - test -f $PREFIX/libmesh/lib/libmesh_opt.so        # [linux]
-    - test -f $PREFIX/libmesh/lib/libmetaphysicl.dylib  # [osx]
-    - test -f $PREFIX/libmesh/lib/libmetaphysicl.so     # [linux]
-    - test -f $PREFIX/libmesh/lib/libtimpi_opt.dylib    # [osx]
-    - test -f $PREFIX/libmesh/lib/libtimpi_opt.so       # [linux]
+#test:
+#  commands:
+#    - test -f $PREFIX/libmesh/lib/libmesh_opt.dylib     # [osx]
+#    - test -f $PREFIX/libmesh/lib/libmesh_opt.so        # [linux]
+#    - test -f $PREFIX/libmesh/lib/libmetaphysicl.dylib  # [osx]
+#    - test -f $PREFIX/libmesh/lib/libmetaphysicl.so     # [linux]
+#    - test -f $PREFIX/libmesh/lib/libtimpi_opt.dylib    # [osx]
+#    - test -f $PREFIX/libmesh/lib/libtimpi_opt.so       # [linux]
 
 about:
   home: http://libmesh.github.io/
   license: LGPL
-  summary: 'The libMesh library provides a framework for the numerical simulation of partial differential equations using arbitrary unstructured discretizations on serial and parallel platforms'
+  summary: >
+    The libMesh library provides a framework for the numerical simulation of partial differential
+    equations using arbitrary unstructured discretizations on serial and parallel platforms
 
 extra:
   recipe-maintainers:

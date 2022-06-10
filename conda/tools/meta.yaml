@@ -10,14 +10,13 @@ source:
 
 build:
   number: {{ build }}
-  pin_depends: strict
 
 requirements:
   build:
     - {{ moose_python }}
-
+    - openssl
+    - setuptools
   run:
-    - moose-mpich
     - numpy
     - matplotlib
     - pandas
@@ -34,10 +33,9 @@ requirements:
     - mako
     - livereload
     - yaml
-    - openssl <3
-    - setuptools <60
-    - clang-tools
     - python
+    - openssl
+    - setuptools
 
 test:
   imports:
@@ -59,7 +57,9 @@ test:
 about:
   home: https://mooseframework.org/
   license: LGPL 2.1
-  summary: 'This superficial module (moose-tools) acts as a top-level module designed to provide all dependencies required in order to run Peacock and MOOSE Documentation.'
+  summary: >
+    This superficial module (moose-tools) acts as a top-level module designed to provide all
+    dependencies required in order to run Peacock and MOOSE Documentation.
 
 extra:
   recipe-maintainers:

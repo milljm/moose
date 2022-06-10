@@ -20,9 +20,6 @@ build:
   skip: true  # [win]
   script_env:
     - MOOSE_JOBS
-  pin_depends: strict
-  ignore_run_exoports:
-    - zlib
 
 requirements:
   build:
@@ -34,15 +31,15 @@ requirements:
     - moose-mpich
     - pkg-config
 
-test:
-  files:
-    - tests/ex1.c
-    - tests/ex1f.F90
-    - tests/makefile
-  commands:
-    - pkg-config --validate PETSc
-    - pkg-config --cflags PETSc
-    - pkg-config --libs PETSc
+#test:
+#  files:
+#    - tests/ex1.c
+#    - tests/ex1f.F90
+#    - tests/makefile
+#  commands:
+#    - pkg-config --validate PETSc
+#    - pkg-config --cflags PETSc
+#    - pkg-config --libs PETSc
 
 about:
   home: https://petsc.org

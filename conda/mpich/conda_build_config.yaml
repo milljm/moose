@@ -20,35 +20,35 @@ moose_xorg_x11:                                             # [linux]
   - xorg-x11-proto-devel-cos7-x86_64 2018.4                 # [linux]
 
 moose_libglu:                                               # [linux]
-  - libglu 9.0.0 hf484d3e_1000                              # [linux]
+  - libglu 9.0.0                                            # [linux]
 
 moose_mesalib:                                              # [linux]
-  - mesalib 18.3.1 h590aaf7_0                               # [linux]
+  - mesalib 18.3.1                                          # [linux]
 
 #### Compilers
 base_mpich:
-  - mpich 4.0.1 h846660c_100                                # [linux]
-  - mpich 4.0.1 hd33e60e_100                                # [not arm64 and osx]
-  - mpich 4.0.1 hd4b5bf3_100                                # [arm64]
+  - mpich 4.0.2                                            # [linux]
+  - mpich 4.0.2                                            # [not arm64 and osx]
+  - mpich 4.0.2                                            # [arm64]
 
 base_mpicc:
-  - mpich-mpicc 4.0.1 hb600da9_100                          # [linux]
-  - mpich-mpicc 4.0.1 h4fd26ce_100                          # [not arm64 and osx]
-  - mpich-mpicc 4.0.1 haad7f49_100                          # [arm64]
+  - mpich-mpicc 4.0.2                                      # [linux]
+  - mpich-mpicc 4.0.2                                      # [not arm64 and osx]
+  - mpich-mpicc 4.0.2                                      # [arm64]
 
 base_mpicxx:
-  - mpich-mpicxx 4.0.1 h166bdaf_100                         # [linux]
-  - mpich-mpicxx 4.0.1 h5eb16cf_100                         # [not arm64 and osx]
-  - mpich-mpicxx 4.0.1 h1c322ee_100                         # [arm64]
+  - mpich-mpicxx 4.0.2                                     # [linux]
+  - mpich-mpicxx 4.0.2                                     # [not arm64 and osx]
+  - mpich-mpicxx 4.0.2                                     # [arm64]
 
 base_mpifort:
-  - mpich-mpifort 4.0.1 h924138e_100                        # [linux]
-  - mpich-mpifort 4.0.1 hbb4e6a2_100                        # [not arm64 and osx]
-  - mpich-mpifort 4.0.1 h3e96240_100                        # [arm64]
+  - mpich-mpifort 4.0.2                                     # [linux]
+  - mpich-mpifort 4.0.2                                     # [not arm64 and osx]
+  - mpich-mpifort 4.0.2                                     # [arm64]
 
 moose_ld64:                                                 # [osx]
-  - ld64 609 h4dfd969_10                                    # [not arm64 and osx]
-  - ld64_osx-arm64 609 h7c97014_10                          # [arm64]
+  - ld64 609                                                # [not arm64 and osx]
+  - ld64_osx-arm64 609                                      # [arm64]
 
 moose_hdf5:
   - hdf5 1.12.1 mpi_mpich_hfd824e9_4                        # [not arm64 and osx]

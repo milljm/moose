@@ -1,5 +1,7 @@
 #!/bin/bash
 set -eu
+touch ${PREFIX}/bin/petsc_placeholder.txt
+exit 0
 export PATH=/bin:$PATH
 
 export PETSC_DIR=$SRC_DIR
