@@ -24,12 +24,13 @@ build:
 requirements:
   build:
     - moose-mpich
+    - pkg-config
   host:
     - cmake
-    - pkg-config
-  run:
     - moose-mpich
-    - pkg-config
+  run:
+    - cmake
+    - moose-mpich
 
 test:
   files:

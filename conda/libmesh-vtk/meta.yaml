@@ -25,9 +25,8 @@ requirements:
     - moose-mpich
     - openssl <3
     - pyqt               # [not arm64]
-  host:
-    - cmake
     - ninja
+    - cmake
   run:
     - {{ moose_python }}
     - moose-mpich
