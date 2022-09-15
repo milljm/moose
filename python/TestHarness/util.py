@@ -13,6 +13,7 @@ from mooseutils import colorText
 from collections import OrderedDict
 import json
 import sys
+import yaml
 
 TERM_COLS = int(os.getenv('MOOSE_TERM_COLS', '110'))
 TERM_FORMAT = os.getenv('MOOSE_TERM_FORMAT', 'njcst')
@@ -819,12 +820,29 @@ def getExeObjects(exe):
     addObjectsFromBlock(obj_names, data, "blocks")
     return obj_names
 
+def readResourceFile(exe, app_name):
+    resource_path = os.path.join(os.path.dirname(os.path.abspath(exe)),
+                                 f'.{app_name}')
+    if os.path.exists(resource_path):
+        try:
+            with open(resource_path, 'r') as stream:
+                return yaml.safe_load(stream)
+        except yaml.YAMLError:
+            print(f'resource file parse failure: {resource_path}')
+            sys.exit(1)
+    return {}
+
+# TODO: Deprecate when we can remove getExeObjects
 def getExeRegisteredApps(exe):
+    data = getExeJSON(exe)
+    return data.get('global', {}).get('registered_apps', [])
+
+def getRegisteredApps(exe, app_name):
     """
     Gets a list of registered applications
     """
-    data = getExeJSON(exe)
-    return data.get('global', {}).get('registered_apps', [])
+    resource_content = readResourceFile(exe, app_name)
+    return resource_content.get('registered_apps', [])
 
 def checkOutputForPattern(output, re_pattern):
     """
