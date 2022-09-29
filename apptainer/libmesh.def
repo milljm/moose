@@ -5,12 +5,19 @@ From: <LOCATION>
     # make the MOOSE repository at-my-current-state available
     # for vetted versions of libMesh during %post
     <MOOSE_DIR> /usr/local/tmp_moose_src
+    # Populate SSH Keys if necessary
+    <KEY>
 
 %environment
     # libMesh
     export LIBMESH_DIR=/usr/local/libmesh
 
 %post
+    # GIT SSH Keys
+    if [ "X<KEY>" != "<KEY>" ]; then
+        export GIT_SSH_COMMAND="ssh -i $(echo '<KEY>' | cut -d\  -f2)"
+    fi
+
     # Build libMesh
     umask 022
     export LIBMESH_DIR=/usr/local/libmesh
@@ -18,9 +25,18 @@ From: <LOCATION>
     echo -e "JOBS: $MOOSE_JOBS\nMETHODS: ${METHODS}"
     cd /usr/local/tmp_moose_src/scripts
     ./update_and_rebuild_libmesh.sh
-
-    # Fix possible permissions
+    # Fix possibly bad permissions
     chmod -R o=u-w,g=u-w /usr/local/libmesh
 
     # Clean Up
     rm -rf /usr/local/tmp_moose_src
+
+    # Remove any keys somehow populated in root's home
+    rm -rf /root/.ssh
+    # Verify that root keys/configs/etc no longer exists
+    if [ -d /root/.ssh ]; then exit 1; fi
+
+    # Erase Key: '<KEY>'' (if set)
+    if [ "X<KEY>" != "<KEY>" ]; then
+        rm -f "$(echo '<KEY>' | cut -d\  -f2)"
+    fi

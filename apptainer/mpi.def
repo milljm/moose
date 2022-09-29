@@ -90,3 +90,8 @@ EOF
 
     # Clean Up
     rm -rf ${TEMP_LOC}
+
+    # Remove any keys somehow populated in root's home
+    rm -rf /root/.ssh
+    # Verify that root keys/configs/etc no longer exists
+    if [ -d /root/.ssh ]; then exit 1; fi
