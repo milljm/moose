@@ -26,10 +26,12 @@ From: <LOCATION>
         set -x +e
         printf "\033[0;31m\n\nNOTICE: WE WILL NOT EXIT ON ERROR UNLESS SPECIFICALLY TOLD TO DO SO\033[0m\n\n"
     fi
-    if [ "<MOOSE_SKIP_DOCS>" == "TRUE" ]; then
-        printf "\033[0;31m\n\nNOTICE: NO DOCUMENTATION WILL BE BUILT\033[0m\n\n"
-        export MOOSE_SKIP_DOCS=True
-    fi
+
+    # Leave commented, as we should someday come back around and support it logically
+    #if [ "<MOOSE_SKIP_DOCS>" == "TRUE" ]; then
+    #    printf "\033[0;31m\n\nNOTICE: NO DOCUMENTATION WILL BE BUILT\033[0m\n\n"
+    #    export MOOSE_SKIP_DOCS=True
+    #fi
 
     # Necessary additions (for documentation, etc)
     pip3 install daemonlite requests livereload bs4 pybtex pylatexenc
@@ -43,7 +45,7 @@ From: <LOCATION>
     # Fix permissions during for `make install`
     umask 022
     # Build MOOSE modules
-    export MOOSE_JOBS=32
+    export MOOSE_JOBS=${MOOSE_JOBS:-12}
     echo "JOBS: ${MOOSE_JOBS}"
     export APPLICATION=<APPLICATION>
     if [ "<APPLICATION>" == "moose" ]; then
@@ -58,21 +60,35 @@ From: <LOCATION>
     else
         cd /usr/local/application_src/
     fi
-    make -j ${MOOSE_JOBS:-32}
-    make install -j ${MOOSE_JOBS:-32}
+    make -j ${MOOSE_JOBS}
+
+    # TODO: someday, `make install` should just work (for every app and thats the rub as explained below)
+    # Okay, so here's the rub. If we try to do everything all in one go it usually fails (tokenize
+    # errors). But this has nothing to do with creating what we really want: the appname-opt binary.
+    # So, perform the make install without documentation first. Then just 'try it'. Allow failures.
+    # From what I've seen, moosedocs generates plenty documentation if not 100% fail-free. Enough to
+    # call this a win for now.
+    unset MOOSE_SKIP_DOCS
+    make install -j ${MOOSE_JOBS}
+    export MOOSE_SKIP_DOCS=True
+    set +e
+    make install -j ${MOOSE_JOBS}
+    if [ "<ALLOWED_TO_FAIL>" == "TRUE" ]; then
+        set +e
+    fi
 
     # Fix permissions
     chmod -R o=u-w,g=u-w /usr/local/<APPLICATION>
 
     # Test Application
-    ./run_tests -j ${MOOSE_JOBS:-12}
+    ./run_tests -j ${MOOSE_JOBS}
 
     # Test make install copy-inputs
     export PATH=/usr/local/<APPLICATION>/bin:$PATH
     cd ${TEMP_LOC}
     ${APPLICATION}-opt --copy-inputs tests
     cd ${APPLICATION}/tests
-    ${APPLICATION}-opt --run -j ${MOOSE_JOBS:-6} -t
+    ${APPLICATION}-opt --run -j ${MOOSE_JOBS} -t
 
     # Clean Up
     rm -rf /usr/local/application_src
