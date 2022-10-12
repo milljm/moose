@@ -1,0 +1,47 @@
+BootStrap: <PROTOCOL>
+From: <LOCATION>
+
+%files
+    # make the MOOSE repository at-my-current-state available
+    # for vetted versions of PETSc during %post
+    <MOOSE_DIR> /usr/local/tmp_moose_src
+    # Populate SSH Keys if necessary
+    <KEY>
+
+%environment
+    # PETSc
+    export PETSC_DIR=/usr/local/petsc
+    export PETSC_ARCH=arch-moose
+
+%post
+    # GIT SSH Keys
+    if [ "X<KEY>" != "<KEY>" ]; then
+        export GIT_SSH_COMMAND="ssh -i $(echo '<KEY>' | cut -d\  -f2)"
+    fi
+
+    # Build PETSc
+    umask 022
+    export PETSC_PREFIX=/usr/local/petsc
+    cd /usr/local/tmp_moose_src/scripts
+    echo -e "JOBS: $MOOSE_JOBS"
+    ./update_and_rebuild_petsc.sh
+
+    # Test PETSc
+    cd /usr/local/tmp_moose_src/petsc
+    make SLEPC_DIR=/usr/local/petsc PETSC_DIR=/usr/local/petsc PETSC_ARCH="" check
+
+    # Fix possibly bad permissions
+    chmod -R o=u-w,g=u-w /usr/local/petsc
+
+    # Clean Up
+    rm -rf /usr/local/tmp_moose_src
+
+    # Remove any keys somehow populated in root's home
+    rm -rf /root/.ssh
+    # Verify that root keys/configs/etc no longer exists
+    if [ -d /root/.ssh ]; then exit 1; fi
+
+    # Erase Key: '<KEY>'' (if set)
+    if [ "X<KEY>" != "<KEY>" ]; then
+        rm -f "$(echo '<KEY>' | cut -d\  -f2)"
+    fi

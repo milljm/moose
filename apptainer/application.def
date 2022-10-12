@@ -1,0 +1,104 @@
+BootStrap: <PROTOCOL>
+From: <LOCATION>
+
+%files
+    # make the application repository at-my-current-state available within container
+    # for vetted versions of APPLICATION during %post
+    <REPO_DIR> /usr/local/application_src
+    # Populate SSH Keys if necessary
+    <KEY>
+
+%environment
+    export PATH=/usr/local/<APPLICATION>/bin:$PATH
+    export PATH=/usr/local/<APPLICATION>/share/<APPLICATION>:$PATH
+
+%post
+    # By default, lets not print every command
+    set +x
+    # Apply SSH Key to GIT command
+    if [ "X<KEY>" != "<KEY>" ]; then
+        export GIT_SSH_COMMAND="ssh -i $(echo '<KEY>' | cut -d\  -f2)"
+    fi
+
+    # Create container regardless of failure
+    if [ "<ALLOWED_TO_FAIL>" == "TRUE" ]; then
+        # Print every command now that we know there are problems creating this container
+        set -x +e
+        printf "\033[0;31m\n\nNOTICE: WE WILL NOT EXIT ON ERROR UNLESS SPECIFICALLY TOLD TO DO SO\033[0m\n\n"
+    fi
+
+    # Leave commented, as we should someday come back around and support it logically
+    if [ "<MOOSE_SKIP_DOCS>" == "TRUE" ]; then
+        printf "\033[0;31m\n\nNOTICE: NO DOCUMENTATION WILL BE BUILT\033[0m\n\n"
+        export MOOSE_SKIP_DOCS=True
+    fi
+
+    # Necessary additions (for documentation, etc)
+    pip3 install daemonlite requests livereload bs4 pybtex pylatexenc
+
+    # Prepare a temp directory
+    export TEMP_LOC=`mktemp -d /tmp/rocky_singularity.XXXXX`
+
+    # `make install` target path
+    export MOOSE_PREFIX=/usr/local/<APPLICATION>
+
+    # Fix permissions during for `make install`
+    umask 022
+    # Build MOOSE modules
+    export MOOSE_JOBS=${MOOSE_JOBS:-12}
+    echo "JOBS: ${MOOSE_JOBS}"
+    export APPLICATION=<APPLICATION>
+    if [ "<APPLICATION>" == "moose" ]; then
+        cd /usr/local/application_src
+        export APPLICATION='combined'
+    else
+        cd /usr/local/application_src/moose
+    fi
+    ./configure --prefix=${MOOSE_PREFIX}
+    if [ "<APPLICATION>" == "moose" ]; then
+        cd /usr/local/application_src/modules
+    else
+        cd /usr/local/application_src/
+    fi
+    make -j ${MOOSE_JOBS}
+
+    # TODO: someday, `make install` should just work (for every app and thats the rub as explained below)
+    # Okay, so here's the rub. If we try to do everything all in one go it usually fails (tokenize
+    # errors). But this has nothing to do with creating what we really want: the appname-opt binary.
+    # So, perform the make install without documentation first. Then just 'try it'. Allow failures.
+    # From what I've seen, moosedocs generates plenty documentation if not 100% fail-free. Enough to
+    # call this a win for now.
+    unset MOOSE_SKIP_DOCS
+    make install -j ${MOOSE_JOBS}
+    export MOOSE_SKIP_DOCS=True
+    set +e
+    make install -j ${MOOSE_JOBS}
+    if [ "<ALLOWED_TO_FAIL>" == "TRUE" ]; then
+        set +e
+    fi
+
+    # Fix permissions
+    chmod -R o=u-w,g=u-w /usr/local/<APPLICATION>
+
+    # Test Application
+    ./run_tests -j ${MOOSE_JOBS}
+
+    # Test make install copy-inputs
+    export PATH=/usr/local/<APPLICATION>/bin:$PATH
+    cd ${TEMP_LOC}
+    ${APPLICATION}-opt --copy-inputs tests
+    cd ${APPLICATION}/tests
+    ${APPLICATION}-opt --run -j ${MOOSE_JOBS} -t
+
+    # Clean Up
+    rm -rf /usr/local/application_src
+    cd /usr/local/<APPLICATION>/
+    find . -type f -name "__pycache__" -exec rm -rf {} \;
+    rm -rf ${TEMP_LOC}
+    rm -rf /root/.ssh
+    if [ -d /root/.ssh ]; then exit 1; fi
+
+    # Erase Key: '<KEY>'' (if set)
+    if [ "X<KEY>" != "<KEY>" ]; then
+        rm -f "$(echo '<KEY>' | cut -d\  -f2)"
+    fi
