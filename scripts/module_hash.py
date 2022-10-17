@@ -57,7 +57,7 @@ def run_subprocess(args, command):
         tell(False, 'arbitrary', 0)
     return out
 
-def parse_args():
+def parse_args(args):
     """ parse arguments """
     parser = argparse.ArgumentParser(description='Supplies a hash for a given library')
     parser.add_argument('library', metavar='library', choices=ENTITIES,
@@ -73,7 +73,17 @@ def parse_args():
                         help='Mimic Conda and print a <VERSION>_<BUILD> string')
     parser.add_argument('-d', '--dependencies', action='store_true', default=False,
                         help='List dependencies for said library in oras format')
-    return parser.parse_args()
+
+    # Default to moose if library supplied matches nothing
+    _supply_default = False
+    if len(args[:-1]):
+        if args[1] not in ENTITIES and args[1][0] != '-':
+            _supply_default = True
+            sys.argv[1] = 'moose'
+    args = parser.parse_args()
+    if _supply_default and not args.quiet:
+        print('Untracked library, using "moose" as your dependency')
+    return args
 
 def git_file(args, entity):
     """ use git to return file at commit """
@@ -150,7 +160,7 @@ def get_tag(args, meta_yaml):
 
 def main():
     """ print hash for supplied library """
-    args = parse_args()
+    args = parse_args(sys.argv)
     hash_group = {}
     entity_list = []
     groups = build_list(args)
