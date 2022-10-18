@@ -28,10 +28,10 @@ From: <LOCATION>
     fi
 
     # Leave commented, as we should someday come back around and support it logically
-    #if [ "<MOOSE_SKIP_DOCS>" == "TRUE" ]; then
-    #    printf "\033[0;31m\n\nNOTICE: NO DOCUMENTATION WILL BE BUILT\033[0m\n\n"
-    #    export MOOSE_SKIP_DOCS=True
-    #fi
+    if [ "<MOOSE_SKIP_DOCS>" == "TRUE" ]; then
+        printf "\033[0;31m\n\nNOTICE: NO DOCUMENTATION WILL BE BUILT\033[0m\n\n"
+        export MOOSE_SKIP_DOCS=True
+    fi
 
     # Necessary additions (for documentation, etc)
     pip3 install daemonlite requests livereload bs4 pybtex pylatexenc
