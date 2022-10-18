@@ -16,7 +16,7 @@ From: <LOCATION>
     # By default, lets not print every command
     set +x
     # Apply SSH Key to GIT command
-    if [ "X<KEY>" != "<KEY>" ]; then
+    if [ -n "<KEY>" ]; then
         export GIT_SSH_COMMAND="ssh -i $(echo '<KEY>' | cut -d\  -f2)"
     fi
 
@@ -99,6 +99,6 @@ From: <LOCATION>
     if [ -d /root/.ssh ]; then exit 1; fi
 
     # Erase Key: '<KEY>'' (if set)
-    if [ "X<KEY>" != "<KEY>" ]; then
+    if [ -n "<KEY>" ]; then
         rm -f "$(echo '<KEY>' | cut -d\  -f2)"
     fi
