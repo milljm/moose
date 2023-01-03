@@ -54,9 +54,28 @@ class RunPBS(QueueManager):
         # We shouldn't run into a null, but just in case, lets handle it
         if launch_id:
             qstat_command_result = util.runCommand(f'qstat -xf -F json {launch_id}')
-            json_out = json.loads(qstat_command_result)
-            pbs_server = json_out['pbs_server']
-            job_meta = json_out['Jobs'][f'{launch_id}.{pbs_server}']
+            try:
+                json_out = json.loads(qstat_command_result)
+                pbs_server = json_out['pbs_server']
+                job_meta = json_out['Jobs'][f'{launch_id}.{pbs_server}']
+
+            # Darn. JobID no longer exists (1 week stale). Do things as appropriate
+            except json.decoder.JSONDecodeError:
+                # The PBS job completed (but we are not sure if the job exited successfully)
+                if os.path.join(jobs[0].getTestDir(), '.previous_test_results.json'):
+                    return False
+
+                # TestHarness either stacktraced (did not write results), or PBS killed the job.
+                elif os.path.join(jobs[0].getTestDir(), 'qsub.output'):
+                    with open(os.path.join(jobs[0].getTestDir(), 'qsub.output'), 'r') as outfile:
+                        # Fail all tests launched in this job
+                        qstat_command_result = f'ERROR: {outfile.read()}'
+
+                # Some other strange parsing error
+                else:
+                    qstat_command_result = ('ERROR: TestHarness encountered an error while'
+                                           f'determining what to make of PBS JobID {launch_id}:\n'
+                                           f'{qstat_command_result}')
 
             # handle a qstat execution failure for some reason
             if qstat_command_result.find('ERROR') != -1:
@@ -67,8 +86,14 @@ class RunPBS(QueueManager):
                 return True
 
             job_result = job_meta.get('Exit_status', False)
+
+            # This should always exist. If it doesn't, we want to error catastrophically
             job_output = job_meta['Output_Path']
+
+            # Record the current PBS job state
             meta_data[self.__class__.__name__]['STATUS'] = PBS_STATUSES[job_meta['job_state']]
+
+            # Exit status does not exist, job still running
             if not job_result:
                 return
 

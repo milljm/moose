@@ -1119,7 +1119,8 @@ class TestHarness:
             print('ERROR: --pbs and --pedantic-checks cannot be used simultaneously')
             sys.exit(1)
         if opts.pbs and opts.jobs:
-            print('ERROR: --pbs and -j|--jobs cannot be used simultaneously')
+            print('ERROR: --pbs and -j|--jobs cannot be used simultaneously.\n'
+                  'Control resources within your test spec files instead (min|max_parallel)')
             sys.exit(1)
         if opts.pbs and opts.extra_info:
             print('ERROR: --pbs and -e (extra info) cannot be used simultaneously')
