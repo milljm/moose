@@ -28,6 +28,7 @@ APPLICATION_DIR    := $(MOOSE_DIR)/modules/combined
 APPLICATION_NAME   := combined
 BUILD_EXEC         := yes
 GEN_REVISION       := no
+INSTALLABLE_DIRS   := test/tests->tests ../tensor_mechanics/test/plugins->../tensor_mechanics/test
 include            $(FRAMEWORK_DIR)/app.mk
 
 ###############################################################################

@@ -1443,7 +1443,7 @@ MooseApp::showInputs() const
 std::string
 MooseApp::getInstallableInputs() const
 {
-  return "";
+  return MOOSE_INSTALLABLE_DIRS;
 }
 
 bool
