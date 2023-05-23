@@ -54,6 +54,9 @@ fi
 
 export HYDRA_LAUNCHER=fork
 
+# DEBUG FOR NOW (build quick)
+export METHODS=opt
+
 source $SRC_DIR/configure_libmesh.sh
 export INSTALL_BINARY="${SRC_DIR}/build-aux/install-sh -C"
 LIBMESH_DIR=${PREFIX}/libmesh \

@@ -1,32 +1,32 @@
 #### Compilers
 base_mpich:
   - mpich 4.0.2                                            # [linux]
-  - mpich 4.0.2                                            # [not arm64 and osx]
+  - mpich 4.1.1                                            # [not arm64 and osx]
   - mpich 4.0.2                                            # [arm64]
 
 base_mpicc:
   - mpich-mpicc 4.0.2                                      # [linux]
-  - mpich-mpicc 4.0.2                                      # [not arm64 and osx]
+  - mpich-mpicc 4.1.1                                      # [not arm64 and osx]
   - mpich-mpicc 4.0.2                                      # [arm64]
 
 base_mpicxx:
   - mpich-mpicxx 4.0.2                                     # [linux]
-  - mpich-mpicxx 4.0.2                                     # [not arm64 and osx]
+  - mpich-mpicxx 4.1.1                                     # [not arm64 and osx]
   - mpich-mpicxx 4.0.2                                     # [arm64]
 
 base_mpifort:
   - mpich-mpifort 4.0.2                                     # [linux]
-  - mpich-mpifort 4.0.2                                     # [not arm64 and osx]
+  - mpich-mpifort 4.1.1                                     # [not arm64 and osx]
   - mpich-mpifort 4.0.2                                     # [arm64]
 
 moose_libgfortran:
   - libgfortran-ng 12.1.0 h69a702a_16                       # [linux]
-  - libgfortran 5.0.0 9_3_0_h6c81a4c_23                     # [not arm64 and osx]
+  - libgfortran                     # [not arm64 and osx]
   - libgfortran 5.0.0.dev0 11_0_1_hf114ba7_23               # [arm64]
 
 moose_libgfortran5:
   - libgfortran5 12.1.0 hdcd56e2_16                         # [linux]
-  - libgfortran5 9.3.0 h6c81a4c_23                          # [not arm64 and osx]
+  - libgfortran5                          # [not arm64 and osx]
   - libgfortran5 11.0.1.dev0 hf114ba7_23                    # [arm64]
 
 moose_ld64:                                                 # [osx]
@@ -34,7 +34,7 @@ moose_ld64:                                                 # [osx]
   - ld64_osx-arm64 609                                      # [arm64]
 
 moose_hdf5:
-  - hdf5 1.12.1 mpi_mpich_hfd824e9_4                        # [not arm64 and osx]
+  - hdf5 1.14.0 mpi_mpich_ha8f2ad8_3                        # [not arm64 and osx]
   - hdf5 1.12.1 mpi_mpich_h08b82f9_4                        # [linux]
   - hdf5 1.12.1 mpi_mpich_hfc22502_3                        # [arm64]
 

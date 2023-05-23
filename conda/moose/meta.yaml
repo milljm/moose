@@ -1,10 +1,8 @@
 # Do not alter <VERSION>, <SKIP_DOCS>. These are template tokens altered
 # on the fly by civet recipes. The only modifiable item in moose/ is the
 # conda_build_config.yaml file (moose_libmesh)
-{% set VERSION = "<VERSION>" %}
-{% set SKIP_DOCS = "<SKIP_DOCS>" %}
-{% set build = 0 %}
-{% set strbuild = "build_" + build|string %}
+{% set VERSION = "2023.05.23" %}
+{% set SKIP_DOCS = "True" %}
 
 package:
   name: moose
@@ -14,8 +12,9 @@ source:
   - path: ../../../moose
 
 build:
-  number: {{ build }}
-  string: {{ strbuild }}
+  # build number/string is always 0
+  number: 0
+  string: build_0
   skip: true # [win]
   pin_depends: strict
   script_env:
