@@ -25,6 +25,7 @@ packages:
   libmesh:
     dependencies:
       - petsc
+      - mpich
     apptainer:
       from: petsc
     influential:
@@ -37,6 +38,8 @@ packages:
       - conda/libmesh-vtk/meta.yaml
       - conda/libmesh-vtk/conda_build_config.yaml
   wasp:
+    dependencies:
+      - mpich
     influential:
       - framework/contrib/wasp
       - conda/wasp/meta.yaml
