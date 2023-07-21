@@ -11,6 +11,11 @@
 JOB_NUM=${PBS_JOBID%\.*}
 
 export MV2_ENABLE_AFFINITY=0
+export MOOSE_COMMAND="cd <WORKING_DIR>; <COMMAND>"
 
-cd <WORKING_DIR>
-<COMMAND>
+if [ -n "<USE_APPTAINER>" ]; then
+    module load use.moose
+    module load moosetainer
+else
+    eval ${MOOSE_COMMAND}
+fi

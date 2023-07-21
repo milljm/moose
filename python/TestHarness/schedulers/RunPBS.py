@@ -123,6 +123,10 @@ class RunPBS(QueueManager):
 
         template = {}
 
+        # Use Apptainer if detected
+        if os.getenv('APPTAINER_NAME'):
+            template['use_apptainer'] = 'true'
+
         # Launch script location
         template['launch_script'] = os.path.join(job.getTestDir(), os.path.basename(job.getTestNameShort()) + '.qsub')
 
