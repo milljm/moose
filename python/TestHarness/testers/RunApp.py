@@ -8,6 +8,7 @@
 #* https://www.gnu.org/licenses/lgpl-2.1.html
 
 import re, os, shutil
+import pyhit
 from Tester import Tester
 from TestHarness import util
 
@@ -121,10 +122,20 @@ class RunApp(Tester):
         else:
             default_ncpus = options.parallel
 
-        # Raise the floor
-        ncpus = max(default_ncpus, int(self.specs['min_parallel']))
-        # Lower the ceiling
+        # Read from the top block
+        # TODO: Is this information already available somewhere without having to I/O?
+        root = pyhit.load(os.path.join(self.specs['test_dir'], self.specs['spec_file']))
+
+        # Raise the floor, first by top-level block, then allow individual test to override
+        ncpus = root.children[0].get('min_parallel', default_ncpus)
+
+        ncpus = max(ncpus, int(self.specs['min_parallel']))
+        print(f'after_min ncpus: {ncpus}, {self.specs["test_name"]}')
+
+        # Lower the ceiling, first by top-lovel block, then allow individual test to override
+        ncpus = root.children[0].get('max_parallel', ncpus)
         ncpus = min(ncpus, int(self.specs['max_parallel']))
+        print(f'after_max ncpus: {ncpus}, {self.specs["test_name"]}')
 
         if ncpus > default_ncpus:
             self.addCaveats('min_cpus=' + str(ncpus))
