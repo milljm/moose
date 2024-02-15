@@ -17,7 +17,8 @@ build:
 
 requirements:
   run:
-    - {{ moose_mpich }}
+    - {{ mpi }}
+    - {{ moose_mpi }}
     - pyaml
     - numpy
     - pandas

@@ -32,6 +32,7 @@ requirements:
     - {{ moose_libgfortran5 }}
     - {{ moose_clangcc }}                     # [osx]
     - {{ moose_clangxx }}                     # [osx]
+    - hdf5=1.14.3=mpi_{{ mpi }}_*
 
   run:
     - {{ mpi }}
@@ -41,6 +42,14 @@ requirements:
     - {{ moose_libgfortran5 }}
     - {{ moose_clangcc }}                     # [osx]
     - {{ moose_clangxx }}                     # [osx]
+    - hdf5=1.14.3=mpi_{{ mpi }}_*
+    - automake 1.16.5
+    - bison 3.4
+    - zfp 0.5.5
+    - autoconf
+    - cmake
+    - make
+    - m4
 
   run_constrained:
     - python <{{3.12}}
