@@ -6,15 +6,18 @@ moose_libmesh:
   - moose-libmesh 2024.01.23 mpich_0
   - moose-libmesh 2024.01.23 openmpi_0
 
+# Note: No build number (we pin by date only)
+moose_peacock:
+  - moose-peacock 2024.02.14 mpich
+  - moose-peacock 2024.02.14 openmpi
+
+zip_keys:
+  - mpi
+  - moose_libmesh
+  - moose_peacock
+
 moose_wasp:
   - moose-wasp 2023.11.29
 
 moose_tools:
   - moose-tools 2024.02.14
-
-moose_peacock:
-  - moose-peacock 2024.02.14
-
-zip_keys:
-  - mpi
-  - moose_libmesh

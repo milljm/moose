@@ -32,6 +32,7 @@ requirements:
     - {{ moose_petsc }}
     - {{ moose_libmesh_vtk }}
     - pkg-config
+    - libtool
     - libpng
     - zlib
   run:
