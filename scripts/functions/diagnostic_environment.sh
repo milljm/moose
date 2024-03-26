@@ -89,7 +89,7 @@ function _python_modules()
     print_sep
     printf "Python Modules (TestHarness, run-ability)\n\n"
     fail_modules=(packaging)
-    warn_modules=(yaml pyaml jinja2)
+    warn_modules=(yaml jinja2)
     local error_cnt=0
     local warn_cnt=0
     for fail_module in "${fail_modules}"; do
