@@ -73,25 +73,32 @@ function print_help()
     args=("-h|--help"\
           "-f|--full-build"\
           "-r|--run-checks"\
-          "--continue-on-fail"\
-          "-c|--conda-channel")
+          "-c|--conda-channel"\
+          "--continue-on-fail")
 
     args_about=("Print this message and exit."\
-                "Build PETSc, libMesh, WASP, MOOSE, and then run entire TestHarness suite."\
+                "Build PETSc, libMesh, WASP, MOOSE, and then run entire test suite."\
                 "Build MOOSE and then run aggregated tests."\
-                "Do not stop on failure. If this option works, you have intermittent network issues."\
-                "Prioritize MOOSE packages with this channel (default is public).")
+                "Prioritize MOOSE packages with this channel (default is public)."\
+                "Do not stop on failure. If this option works, you have intermittent network issues.")
 
     printf "\nSyntax:\n\t./`basename $0`\n\nOptions:\n\n"
     print_args args args_about
     printf "\nInfluencial Environment Variables:\n
-\tMETHODS
-\tMETHOD
-\tMOOSE_JOBS
-\tREQUESTS_CA_BUNDLE
-\tSSL_CERT_FILE
-\tCURL_CA_BUNDLE\n
-Supplying no arguments prints useful environment information.\n"
+\tMETHODS             libMesh build type \"opt dbg devel oprof\" (default: opt)
+\tMETHOD              MOOSE build type (default: \"opt\")
+\tMOOSE_JOBS          Cores available during \`make -j \$MOOSE_JOBS\`
+
+Proxies/Certificate Authority environmet variables:
+(corporate work machines may require that these be set)
+
+\tREQUESTS_CA_BUNDLE=${REQUESTS_CA_BUNDLE:-'not set'}
+\tSSL_CERT_FILE=${SSL_CERT_FILE:-'not set'}
+\tCURL_CA_BUNDLE=${CURL_CA_BUNDLE:-'not set'}
+\thttp_proxy=${HTTP_PROXY:-${http_proxy:-'not set'}}
+\thttps_proxy=${HTTPS_PROXY:-${https_proxy:-'not set'}}
+
+Supplying no arguments prints useful environment information.\n\n"
 }
 
 # Obtain a temp directory
@@ -110,10 +117,15 @@ if [ -z "$PRISTINE_ENVIRONMENT" ]; then
                 export FULL_BUILD=1; shift ;;
             -r|--run-checks)
                 export RUN_CHECKS=1; shift ;;
+            -c|--conda-channel)
+                if [[ $(echo $2 | grep -c '^http\|^file') -le 0 ]]; then
+                    print_red "\ninvalid -c|--conda-channel value\n"
+                    print_help; exit 1
+                fi
+                export CONDA_CHANNEL=$2; shift 2;;
             --continue-on-fail)
                 export NO_FAILURE=1; shift ;;
-            -c|--conda-channel)
-                export CONDA_CHANNEL=$2; shift 2;;
+
             *)
                 printf "Unknown argument: $1\n"; exit 1;;
         esac
