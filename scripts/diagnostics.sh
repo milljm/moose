@@ -17,8 +17,11 @@ function get_value()
 
 function print_failure_and_exit()
 {
-    print_environment
-    printf "\nThere was an error while $(print_red "$@")\033[0m.
+    if [[ -n "${CANCELED}" ]]; then exit 1; fi
+    print_red "ERROR: "
+    printf "We died one too many times. Printing report.\n"
+    env_test
+    printf "\n\nThere was an error while $(print_red "$@")\033[0m.
 
 Please report the entirety of the output of diagnostics on
 this terminal to either YOUR existing post OR a new post on
@@ -110,10 +113,11 @@ Proxies/Certificate Authority environmet variables:
 Supplying no arguments prints useful environment information.\n\n"
 }
 
-# Obtain a temp directory
-export CTMP_DIR=$(create_tmp)
-# Delete temporary directory at any time this script exits
-trap 'printf "\033[0mDeleting temporary directory\n\t${CTMP_DIR}\n"; rm -rf "$CTMP_DIR";' EXIT
+function ctl_c()
+{
+    printf "\033[0m\nYou canceled diagnostics\n"
+    export CANCELED=true
+}
 
 # Check Arguments. If PRISTINE is already set, break out of argument checking
 if [ -z "$PRISTINE_ENVIRONMENT" ]; then
@@ -147,6 +151,10 @@ if [ -z "$PRISTINE_ENVIRONMENT" ]; then
     fi
     # FULL_BUILD or RUN_CHECKS is set, but not PRISTINE_ENVIRONMENT
     if [ "${PRISTINE_ENVIRONMENT}" != 0 ] && [ "${NO_ENVIRONMENT}" == 1 ]; then
+        # Obtain a temp directory
+        export CTMP_DIR=$(create_tmp)
+        # Delete temporary directory at any time this script exits
+        trap 'printf "\033[0m\n\nDeleting temporary directory\n\n\t${CTMP_DIR}\n"; rm -rf "$CTMP_DIR";' EXIT
         printf "Beginning in a pristine environment\n"
         env -i bash --rcfile <(echo "CLEAN_ENV='True' \
                                 PRISTINE_ENVIRONMENT=1 \
@@ -185,6 +193,7 @@ fi
 
 # Augment additional pristine environment variables
 if [ "${PRISTINE_ENVIRONMENT}" == "1" ]; then
+    trap 'ctl_c' INT
     # Make our environment more sane
     export PATH=/bin:/usr/bin:/sbin
     export TERM=xterm-256color
@@ -204,17 +213,17 @@ if [ "${NO_ENVIRONMENT}" == 0 ]; then print_environment; exit; fi
 # Do all the things
 printf "
 Note: The following steps are being performed in a temporary directory, and will be deleted when
-finished or upon encountering an error.
+      finished or upon encountering an error.
 
-This tool should only be used to determine if there are external factors preventing you from
-building or running MOOSE.
+      The purpose of this tool is to determine if there are external factors preventing you from
+      building or running MOOSE.
 
-Errors encountered will usually mean network related or hardware related causes (VPN, Network
-Proxies, Corporate SSL Certificates, etc).
+      Errors encountered will usually mean network related or hardware related causes (VPN,
+      Network Proxies, Corporate SSL Certificates, etc).
 
-If no errors are encountered then likely the issue will be something in your environment as to
-the cause. If this is case, run `basename $0` again without any arguments, and carefully
-scrutinize the output.\n"
+      If no errors are encountered then likely the issue will be something in your environment as
+      to the cause. If this is case, run `basename $0` again without any arguments, and carefully
+      scrutinize the output.\n"
 print_sep
 source ${SCRIPT_DIR}/functions/diagnostic_conda.sh
 source ${SCRIPT_DIR}/functions/diagnostic_application.sh
