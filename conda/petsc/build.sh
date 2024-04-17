@@ -145,9 +145,11 @@ done
 mkdir -p "${PREFIX}/etc/conda/activate.d" "${PREFIX}/etc/conda/deactivate.d"
 cat <<EOF > "${PREFIX}/etc/conda/activate.d/activate_${PKG_NAME}.sh"
 export PETSC_DIR=${PREFIX}/petsc
+export PKG_CONFIG_PATH=${PREFIX}/petsc/lib/pkgconfig:\${PKG_CONFIG_PATH}
 EOF
 cat <<EOF > "${PREFIX}/etc/conda/deactivate.d/deactivate_${PKG_NAME}.sh"
 unset PETSC_DIR
+export PKG_CONFIG_PATH=\${PKG_CONFIG_PATH%":${PREFIX}/petsc/lib/pkgconfig"}
 EOF
 #
 ## Cuda specific activation/deactivation variables (append to above created script)
