@@ -23,11 +23,11 @@ build:
 
 requirements:
   build:
-    - openmpi
+    - mpich
     - {{ moose_dev }}
 
   run:
-    - openmpi
+    - mpich
     - {{ moose_dev }}
 
 test:

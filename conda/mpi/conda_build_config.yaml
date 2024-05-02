@@ -6,9 +6,24 @@ mpi_version:
   - 4.1.2
   - 4.1.6
 
+mpi_friendly_name:
+  - MPICH
+  - OpenMPI
+
+mpi_website:
+  - http://www.mpich.org/documentation/guides
+  - https://www.open-mpi.org/doc/
+
+mpi_dev_website:
+  - https://github.com/pmodels/mpich
+  - https://github.com/open-mpi/ompi
+
 zip_keys:
   - mpi
   - mpi_version
+  - mpi_friendly_name
+  - mpi_website
+  - mpi_dev_website
 
 moose_libgfortran5:
   - libgfortran5 13.2.0 ha4646dd_5                          # [linux]

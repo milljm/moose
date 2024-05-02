@@ -42,18 +42,24 @@ def undefined(arg, *args, **kwargs):
     """
     return arg
 
-# Add your undefined template variables to call 'undefined' method above
+# Read MOOSE_DIR/framework/doc/packages_config.yml to grab defaults
+packages_config = os.path.join(MOOSE_DIR, 'framework', 'doc', 'packages_config.yml')
+packages_yaml = {'default_mpi' : 'mpich'}
+if os.path.exists(packages_config):
+    with open(packages_config, 'r') as pkg_file:
+        packages_yaml.update(yaml.safe_load(pkg_file))
+
+# Allow jinja template variables to return a value when otherwise it would not
 JINJA_CONFIG = {'pin_compatible'        : undefined,
                 'pin_subpackage'        : undefined,
                 'compiler'              : undefined,
-                'mpi'                   : undefined('mpich|openmpi'),
+                'mpi'                   : undefined(packages_yaml['default_mpi']),
                 'moose_libgfortran'     : undefined('libgfortran'),
                 'moose_libgfortran5'    : undefined('libgfortran5'),
                 'moose_petsc'           : undefined('moose-petsc'),
                 'moose_libmesh_vtk'     : undefined('moose-libmesh-vtk'),
                 'moose_libmesh'         : undefined('moose-libmesh'),
                 }
-### End Beautify global
 
 class Versioner:
     """ generates reproducible versions (hashes) for moose apps and moose dependencies """
@@ -75,7 +81,7 @@ class Versioner:
         return meta['hash']
 
     def get_yamlcontents(self, commit):
-        """ load yaml file contents at time of suppllied commit """
+        """ load yaml file contents at time of supplied commit """
         # Load the yaml file at the given commit; the location changed
         # from module_hash.yaml -> versioner.yaml at changed_commit
         changed_commit = '2bd844dc5d4de47238eab94a3a718e9714592de1'
@@ -253,8 +259,9 @@ class Versioner:
         return child
 
     def version_meta(self, commit='HEAD'):
-        """ populate and return dictionary making up the contents involved
-        with generating hashes """
+        """
+        populate and return dictionary making up the contents involved with generating hashes
+        """
         # pylint: disable=too-many-locals
         if not self.is_git_object(commit):
             # pylint: disable=broad-exception-raised

@@ -14,7 +14,7 @@ packages:
   # Deprecated. The following key (mpich) is only necessary for Civet recipes until the PR
   # responsible for this change makes it all the way into master.
   # TODO: remove mpich when able. When you do, remove the same deprecations in test_versioner.py
-  #       (line 49) and versioner.py (101)
+  #       (line 49) and versioner.py (107)
   mpich:
     influential:
       - apptainer/mpi.def

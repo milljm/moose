@@ -6,7 +6,7 @@
 #
 # As well as any directions pertaining to modifying those files.
 # ALSO: Follow the directions in scripts/tests/versioner_hashes.yaml
-{% set version = "2024.04.25" %}
+{% set version = "2024.05.02" %}
 
 # HDF5 Version
 {% set hdf5_version = "1.14.3" %}
@@ -70,12 +70,10 @@ test:
 about:
   home: https://mooseframework.org/
   license: LGPL 2.1
-  summary: 'A top-level package designed to control environment variables related to conda-forge provided MPICH'
-  description: |
-    MPICH is a high performance and widely portable implementation of the
-    Message Passing Interface (MPI) standard.
-  doc_url: http://www.mpich.org/documentation/guides
-  dev_url: https://wiki.mpich.org/mpich/index.php/Main_Page
+  summary: Provides MPI wrapper and toolchain for MOOSE based development.
+  description: {{ mpi_friendly_name }} is a high performance and widely portable implementation of the Message Passing Interface (MPI) standard.
+  doc_url: {{ mpi_website }}
+  dev_url: {{ mpi_dev_website }}
 
 extra:
   recipe-maintainers:
