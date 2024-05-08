@@ -7,7 +7,7 @@ maximum_clang: 16.0.6
 python_default: 3.10
 minimum_python: 3.7
 maximum_python: 3.11
-mpich: 4.1.2
+mpich: 4.2.1
 openmpi: 4.1.6
 petsc_alt: 3.11.4
 petsc: 3.20.3
