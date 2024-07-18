@@ -61,7 +61,7 @@ while true; do
   if no_exit_failure; then
     set -e
     break
-  elif [[ $("< ${SRC_DIR}"/output.log | grep -c "${TRY_AGAIN_REASON}") -eq 0 ]]; then
+  elif [[ $(grep -c "${TRY_AGAIN_REASON}" "${SRC_DIR}"/output.log) -eq 0 ]]; then
     tail -600 "${SRC_DIR}"/output.log && exit 1
   elif [[ ${try_count} -gt 2 ]]; then
     tail -100 "${SRC_DIR}"/output.log

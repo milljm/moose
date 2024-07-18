@@ -6,7 +6,7 @@
 #
 # As well as any directions pertaining to modifying those files.
 # ALSO: Follow the directions in scripts/tests/versioner_hashes.yaml
-{% set version = "2024.07.10" %}
+{% set version = "2024.07.17" %}
 
 # HDF5 Version
 {% set hdf5_version = "1.14.3" %}
@@ -22,12 +22,17 @@ build:
   number: 0
   string: {{ mpi }}
   pin_depends: strict
+  run_exports:
+    - {{ pin_subpackage('moose-mpi', max_pin='x.x.x') }}
   ignore_exports:
     - openssl
   script_env:
     - REQUESTS_CA_BUNDLE
     - SSL_CERT_FILE
     - CURL_CA_BUNDLE
+
+outputs:
+  - name: moose-mpi
 
 requirements:
   build:
@@ -43,6 +48,8 @@ requirements:
     - {{ moose_gfortran_impl }}               # [linux]
     - {{ moose_gcc }}                         # [linux]
     - hdf5={{ hdf5_version }}=mpi_{{ mpi }}_*
+    - _openmp_mutex=*=*_llvm                  # [linux]
+    - llvm-openmp <16                         # [linux]
     - libcxx <18
     - gfortran
   run:
@@ -58,6 +65,8 @@ requirements:
     - {{ moose_gfortran_impl }}               # [linux]
     - gxx                                     # [linux]
     - hdf5={{ hdf5_version }}=mpi_{{ mpi }}_*
+    - _openmp_mutex=*=*_llvm                  # [linux]
+    - llvm-openmp <16                         # [linux]
     - libcxx <18
     - automake 1.16.5
     - libexpat 2.5.0
