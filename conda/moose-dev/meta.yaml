@@ -17,18 +17,63 @@ source:
 
 build:
   number: 0
-  string: {{ mpi }}
-  skip: true  # [win]
-  script_env:
-    - REQUESTS_CA_BUNDLE
-    - SSL_CERT_FILE
-requirements:
-  run:
-    - {{ mpi }}
-    - {{ moose_tools }}
-    - {{ moose_libmesh }}
-    - {{ moose_wasp }}
-    - {{ moose_pytorch }}
+  string: "{{ mpi }}_{{ variant }}"
+
+outputs:
+  - name: moose-dev
+    build:
+      string: "{{ mpi }}_{{ variant }}"
+      skip: true  # [win]
+      script_env:
+        - REQUESTS_CA_BUNDLE
+        - SSL_CERT_FILE
+      run_exports:
+        - {{ pin_subpackage('moose-dev', max_pin='x.x.x') }}
+      track_features:
+        - peacock                                       # [variant == "peacock"]
+        - pytorch                                       # [variant == "torch"]
+      features:
+        - pytorch                                       # [variant == "torch"]
+      ignore_exports:
+        - numpy
+    requirements:
+      run:
+        - {{ mpi }}
+        - {{ moose_tools }}
+        - {{ moose_libmesh }}
+        - {{ moose_wasp }}
+  - name: moose-mpi-peacock
+    build:
+      string: "{{ mpi }}"
+      run_exports:
+        - {{ pin_subpackage('moose-mpi-peacock', max_pin='x.x.x') }}
+    requirements:
+      run:
+        - {{ pin_subpackage("moose-dev", exact=True) }}
+        - pyaml
+        - numpy
+        - pandas
+        - pyqt
+        - matplotlib !=3.9.0
+        - vtk
+  - name: moose-mpi-torch
+    build:
+      string: "{{ mpi }}"
+      run_exports:
+        - {{ pin_subpackage('moose-mpi-torch', max_pin='x.x.x') }}
+        - {{ mpi }}
+        - numpy<2
+    requirements:
+      run:
+        - {{ pin_subpackage("moose-dev", exact=True) }}
+        - {{ mpi }}
+        - {{ moose_pytorch }}
+        - {{ moose_pytorch_cuda }}                      # [linux]
+      test:
+        commands:
+          - torchrun --help
+        imports:
+          - torch
 
 about:
   home: https://mooseframework.org/
