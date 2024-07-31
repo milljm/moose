@@ -6,6 +6,7 @@ export PETSC_ARCH=arch-conda-c-opt
 # Remove std=C++17 from CXXFLAGS as we specify the C++ dialect for PETSc as C++17 in configure_petsc.
 # Specifying both causes an error as of PETSc 3.17.
 CXXFLAGS=${CXXFLAGS//-std=c++[0-9][0-9]}
+LDFLAGS=${LDFLAGS//-Wl,-dead_strip_dylibs}
 
 ## TODO: the following is a partial requirement for the day we introduce pytorch
 # Handle switches created by Conda variants
