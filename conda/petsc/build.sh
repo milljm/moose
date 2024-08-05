@@ -55,9 +55,7 @@ function build_petsc() {
   make PETSC_DIR="$SRC_DIR" PETSC_ARCH=$PETSC_ARCH install
   # set forth by MPI conda-forge package
   # shellcheck disable=SC2154
-  if [[ "${mpi}" == 'mpich' ]]; then
-      make PETSC_DIR="$SRC_DIR" PETSC_ARCH=$PETSC_ARCH check
-  fi
+  make SLEPC_DIR="$PREFIX"/petsc PETSC_DIR="$PREFIX"/petsc PETSC_ARCH="" check
 }
 
 function no_exit_failure(){
