@@ -13,7 +13,7 @@ moose_tools:
   - moose-tools 2024.10.01
 
 moose_peacock:
-  - moose-peacock 2024.10.01
+  - moose-peacock 2024.10.09
 
 zip_keys:
   - mpi
