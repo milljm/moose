@@ -30,7 +30,8 @@ function do_build(){
     cd "${SRC_DIR:?}/build" || exit 1
     ../cmake-config \
         -DTPL_X11_LIBRARIES="${BUILD_PREFIX:?}"/lib/libX11."${BUILD_LD_EXT:?}" \
-        -DTPL_X11_INCLUDE_DIRS="${BUILD_PREFIX:?}"/include || return 1
+        -DTPL_X11_INCLUDE_DIRS="${BUILD_PREFIX:?}"/include \
+        -DCMAKE_INSTALL_LIBDIR='lib' || return 1
 
     # Make and install
     make -j "${JOBS:?}" || return 1

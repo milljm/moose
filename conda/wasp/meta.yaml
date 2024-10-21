@@ -48,6 +48,8 @@ outputs:
       build:
         - {{ moose_cc }}
         - {{ moose_cxx }}
+        - {{ moose_ccompiler }}
+        - {{ moose_cxxcompiler }}
         - make
         - cmake
         - pkg-config
@@ -64,7 +66,7 @@ outputs:
         - {{ pin_subpackage('moose-pyhit', max_pin='x.x')}}
     requirements:
       build:
-        - {{ compiler('cxx') }}
+        - {{ moose_cxxcompiler }}
         - {{ moose_python }}
         - {{ pin_subpackage("moose-wasp-base", exact=True) }}
         - make

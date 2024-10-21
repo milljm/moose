@@ -47,6 +47,8 @@ outputs:
         - {{ moose_libcxx }}
         - {{ moose_cc }}
         - {{ moose_cxx }}
+        - {{ moose_ccompiler }}
+        - {{ moose_cxxcompiler }}
         - {{ moose_clang_osx }}                   # [osx]
         - {{ moose_compiler_rt }}                 # [osx]
         - {{ moose_libclang }}                    # [osx]
@@ -70,6 +72,8 @@ outputs:
         - {{ moose_libcxx }}
         - {{ moose_cc }}
         - {{ moose_cxx }}
+        - {{ moose_ccompiler }}
+        - {{ moose_cxxcompiler }}
         - {{ moose_clang_osx }}                   # [osx]
         - {{ moose_compiler_rt }}                 # [osx]
         - {{ moose_libclang }}                    # [osx]
