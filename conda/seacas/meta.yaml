@@ -32,6 +32,9 @@ requirements:
     - automake
     - wget
   run:
+    - {{ moose_gfortran }}
+    - {{ moose_ccompiler }}
+    - {{ moose_cxxcompiler }}
     - xorg-libx11
     - python 3
 
