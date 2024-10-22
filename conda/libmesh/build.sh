@@ -20,7 +20,9 @@ function set_libmesh_env(){
     fi
 
     PETSC_DIR="$(pkg-config PETSc --variable=prefix)"
+    LIBMESH_DIR="${PREFIX:?}/libmesh"
     export PETSC_DIR
+    export LIBMESH_DIR
     export F90=mpifort
     export F77=mpifort
     export FC=mpifort
@@ -29,6 +31,7 @@ function set_libmesh_env(){
     export CFLAGS="${CTUNING}"
     export CXXFLAGS="${CTUNING}"
     export HYDRA_LAUNCHER=fork
+    export INSTALL_BINARY="${SRC_DIR:?}/build-aux/install-sh -C"
 
     if [[ $HOST == arm64-apple-darwin20.0.0 ]]; then
         LDFLAGS="-L${PREFIX:?}/lib -Wl,-S,-rpath,${PREFIX:?}/lib"
@@ -38,14 +41,10 @@ function set_libmesh_env(){
 }
 
 function do_build(){
-    export LIBMESH_DIR="${PREFIX:?}/libmesh"
     rm -rf "${LIBMESH_DIR:?}"
     mkdir -p "${SRC_DIR:?}/build"; cd "${SRC_DIR:?}/build"
-    export INSTALL_BINARY="${SRC_DIR:?}/build-aux/install-sh -C"
-    set_libmesh_env
     configure_libmesh --with-vtk-lib="${BUILD_PREFIX}"/libmesh-vtk/lib \
                       --with-vtk-include="${BUILD_PREFIX}"/libmesh-vtk/include/vtk-"${VTK_VERSION}"
-
     CORES=${MOOSE_JOBS:-6}
     make -j "$CORES"
     make install -j "$CORES"
@@ -63,6 +62,9 @@ function sed_replace(){
         sed -i'' -e "s|/usr/bin/dd|/bin/dd|g" "$PREFIX"/libmesh/contrib/bin/libtool
     fi
 }
+
+# There are enough "things" we are doing to warrant it's own function
+set_libmesh_env
 
 # shellcheck disable=SC1091  # made available through meta.yaml src path
 source "${SRC_DIR:?}/configure_libmesh.sh"
