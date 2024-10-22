@@ -86,6 +86,8 @@ class Versioner:
         head = self.version_meta(args.commit, full_hash=True)["app"]["hash"]
         formatted_output = f'{head}: #PR\n'
         for library in TRACKING_LIBRARIES:
+            if library == 'app':
+                continue
             meta = self.version_meta(args.commit).get(library, {})
             hash = meta['hash']
             formatted_output+=f'  {library}: {hash}\n'
