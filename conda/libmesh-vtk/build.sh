@@ -1,15 +1,13 @@
 #!/bin/bash
 set -eu
 export PATH=/bin:$PATH
+export VTK_PREFIX="${PREFIX:?}/libmesh-vtk"
+# shellcheck disable=SC2154  # set in meta.yaml env package
+export VTK_VER=${vtk_friendly_version}
 
 function do_build(){
     export HYDRA_LAUNCHER=fork
     export CC=mpicc CXX=mpicxx
-    export VTK_PREFIX="${PREFIX:?}/libmesh-vtk"
-
-    # shellcheck disable=SC2154  # set in meta.yaml env package
-    export VTK_VER=${vtk_friendly_version}
-
     rm -rf "${VTK_PREFIX:?}" "${SRC_DIR:?}/build"
     mkdir -p "${SRC_DIR:?}/build"; cd "${SRC_DIR:?}/build"
 
