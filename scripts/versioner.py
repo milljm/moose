@@ -28,22 +28,25 @@ MOOSE_DIR = os.environ.get('MOOSE_DIR',
                            os.path.abspath(os.path.join(os.path.dirname(
                                os.path.realpath(__file__)), '..')))
 
-### Tracking Libraries
+### Unittest Tracking Libraries (versioner_hashes.yaml)
 # note: Order is important only for historical lookups; git_ancestor(commit) == True
+TRACKING_LIBRARIES = ['tools', 'mpi', 'petsc', 'libmesh', 'wasp', 'moose-dev', 'app']
+
+### All Libraries (versioner.yaml)
 # note: If adding to this list, see line 64 in
 # python/MooseDocs/test/extensions/test_versioner.py
-TRACKING_LIBRARIES = ['libmesh-vtk',
-                      'peacock',
-                      'pprof',
-                      'pyhit',
-                      'seacas',
-                      'tools',
-                      'mpi',
-                      'petsc',
-                      'libmesh',
-                      'wasp',
-                      'moose-dev',
-                      'app']
+LIBRARIES = ['libmesh-vtk',
+             'peacock',
+             'pprof',
+             'pyhit',
+             'seacas',
+             'tools',
+             'mpi',
+             'petsc',
+             'libmesh',
+             'wasp',
+             'moose-dev',
+             'app']
 
 ### Beautify the output of jinja2 rendered content that may only exists in conda-build scenarios
 # pylint: disable=unused-argument
@@ -76,13 +79,24 @@ JINJA_CONFIG = {'pin_compatible'        : undefined,
 class Versioner:
     """ generates reproducible versions (hashes) for moose apps and moose dependencies """
     def __init__(self):
-        self.entities = TRACKING_LIBRARIES
+        self.entities = LIBRARIES
         self.yaml_file = None
+
+    def output_summary(self, args):
+        head = self.version_meta(args.commit, full_hash=True)["app"]["hash"]
+        formatted_output = f'{head}: #PR\n'
+        for library in TRACKING_LIBRARIES:
+            meta = self.version_meta(args.commit).get(library, {})
+            hash = meta['hash']
+            formatted_output+=f'  {library}: {hash}\n'
+        return formatted_output
 
     def output_cli(self, args):
         """ performs command line actions """
         args = self.parse_args(args, self.entities)
         self.check_args(args)
+        if args.summary:
+            return self.output_summary(args)
 
         meta = self.version_meta(args.commit).get(args.library, {})
         if not meta:
@@ -132,6 +146,8 @@ class Versioner:
                             help='Output in JSON format (itemized information)')
         parser.add_argument('--yaml', action='store_true', default=False,
                             help='Output in YAML format (itemized information)')
+        parser.add_argument('-s','--summary',action='store_true', default=False,
+                            help='Output summary as should be entered in versioner_hashes.yaml')
         return parser.parse_args(argv)
 
     @staticmethod
@@ -278,7 +294,7 @@ class Versioner:
         child['conda'] = {}
         return child
 
-    def version_meta(self, commit='HEAD'):
+    def version_meta(self, commit='HEAD', full_hash=False):
         """
         populate and return dictionary making up the contents involved with generating hashes
         """
@@ -313,7 +329,7 @@ class Versioner:
         for package in self.entities:
             is_app = package == 'app'
             if is_app:
-                app_name, _, app_hash = self.get_app()
+                app_name, _, app_hash = self.get_app(full_hash=full_hash)
                 if app_name is None:
                     continue
             if package not in packages:
@@ -349,7 +365,7 @@ class Versioner:
         return influential_meta
 
     @staticmethod
-    def get_app():
+    def get_app(full_hash=False):
         """ gets the current application name/dir/commit the cwd is in, if any """
         # If we're not within a git rep, we're not within an app
         tree_command = ['git', 'rev-parse', '--is-inside-work-tree']
@@ -363,9 +379,9 @@ class Versioner:
         app_name = os.path.basename(git_root).rstrip().lower()
 
         hash_command = ['git', 'rev-parse', 'HEAD']
-        git_hash = subprocess.check_output(hash_command, encoding='utf-8').rstrip()[0:7]
+        git_hash = subprocess.check_output(hash_command, encoding='utf-8').rstrip()
 
-        return app_name, git_root, git_hash
+        return app_name, git_root, f'{git_hash if full_hash else git_hash[0:7]}'
 
     @staticmethod
     def conda_meta_jinja(contents):
