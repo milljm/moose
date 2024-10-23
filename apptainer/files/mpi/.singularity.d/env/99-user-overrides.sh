@@ -1,7 +1,7 @@
 #!/bin/sh
 # allow user overrides if ${HOME}/.bashrc_appatiner` exists
 # NOTE: `source ${HOME}/.bashrc_appatiner` is not enough to support user profile bash functions
-if test "${HOME}/.bashrc_apptainer" ; then
+if test -f "${HOME}/.bashrc_apptainer" ; then
     user_override="${HOME}/.bashrc_apptainer"
     action="${0##*/}"
     case "${action}" in

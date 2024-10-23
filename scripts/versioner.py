@@ -135,8 +135,6 @@ class Versioner:
     @staticmethod
     def parse_args(argv, entities):
         """ parses arguments """
-        # TODO: deprecate mpich. Remove when it gets removed from versioner.yaml
-        argv = [x.replace('mpich', 'mpi') for x in argv]
         parser = argparse.ArgumentParser(description='Supplies a hash for a given library')
         parser.add_argument('library', nargs='?', metavar='library', choices=entities,
                             help=f'choose from: {", ".join(entities)}', default='moose-dev')
