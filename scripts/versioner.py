@@ -82,15 +82,87 @@ class Versioner:
         self.entities = LIBRARIES
         self.yaml_file = None
 
+    def verify_recipes(self, args) ->str:
+        """ provide hints as to version and build information for all tracking libraries """
+        comp_map = {'head': {}, 'base': {}}
+        red = '\033[91m'
+        warn = '\033[93m'
+        green = '\033[92m'
+        bright = '\033[1m'
+        reset = '\033[0m'
+        # Build hash table dicts
+        for library in TRACKING_LIBRARIES:
+        #for library in LIBRARIES:
+            if library == 'app':
+                continue
+            comp_map['head'][library] = self.version_meta('HEAD').get(library, {})
+            comp_map['base'][library] = self.version_meta(args.verify[0]).get(library, {})
+
+        # Build conda package name (for formatting purposes)
+        conda_names = []
+        for library in comp_map['head']:
+            if library == 'app':
+                continue
+            conda_names.append(comp_map['head'][library]['conda']['name'])
+
+        # Do comparisons and formatting
+        formatted_output = ''
+        warn_moose = ''
+        conda_max = max(len(item) for item in conda_names)
+        for library in TRACKING_LIBRARIES:
+        #for library in LIBRARIES:
+            if library == 'app':
+                continue
+
+            head_library = comp_map['head'][library]
+            head_conda = head_library['conda']
+            base_library = comp_map['base'][library]
+            base_conda = base_library['conda']
+            conda_fill = f'{"".rjust((conda_max - len(head_conda["name"])) + 2," ")}'
+
+            # HASH MATCH. Nothing to do.
+            if head_library['hash'] == base_library['hash']:
+                continue
+
+            # If HASH is not matching but versions do, we have a problem
+            if ((head_conda['version'],head_conda['build']) ==
+                 (base_conda['version'], base_conda['build'])):
+
+                formatted_output+=(f'  {head_conda["name"]}: {conda_fill}{red}'
+                                   f'{head_conda["version"]}{reset} build: '
+                                   f'{red}{head_conda["build"]}{reset}\n')
+
+            # This library has a different hash, and version/build (committed changes)
+            else:
+                print(f'{head_conda["name"]}:   {conda_fill}'
+                      f'{bright}{base_conda["version"]}{reset} build: '
+                      f'{bright}{base_conda["build"]}{reset} to '
+                      f'{green}{head_conda["version"]}{reset} build: '
+                      f'{green}{head_conda["build"]}{reset}')
+
+            # Because things that depend on moose-dev are templated, we need to alert differently
+            if library == 'moose-dev':
+                warn_moose = (f'  moose:{conda_fill}     ({warn}templated{reset}. Please verify '
+                              'conda/moose/conda_build_conda.yaml has been updated)')
+
+        if formatted_output:
+            formatted_output+=f'{warn_moose}\n{red}FAIL{reset}'
+            print(formatted_output)
+            sys.exit(1)
+        elif warn_moose:
+            print(warn_moose)
+        return f'{green}\nOK{reset}'
+
     def output_summary(self, args):
+        """ generate summary report that can be used to generate versioner_hash blocks """
         head = self.version_meta(args.commit, full_hash=True)["app"]["hash"]
         formatted_output = f'{head}: #PR\n'
         for library in TRACKING_LIBRARIES:
             if library == 'app':
                 continue
             meta = self.version_meta(args.commit).get(library, {})
-            hash = meta['hash']
-            formatted_output+=f'  {library}: {hash}\n'
+            meta_hash = meta['hash']
+            formatted_output+=f'  {library}: {meta_hash}\n'
         return formatted_output
 
     def output_cli(self, args):
@@ -99,6 +171,8 @@ class Versioner:
         self.check_args(args)
         if args.summary:
             return self.output_summary(args)
+        if args.verify:
+            return self.verify_recipes(args)
 
         meta = self.version_meta(args.commit).get(args.library, {})
         if not meta:
@@ -150,6 +224,9 @@ class Versioner:
                             help='Output in YAML format (itemized information)')
         parser.add_argument('-s','--summary',action='store_true', default=False,
                             help='Output summary as should be entered in versioner_hashes.yaml')
+        parser.add_argument('-v', '--verify', nargs=1, metavar='base_ref hash', default=None,
+                            help='Output version/build number hints against supplied base reference'
+                            ' hash')
         return parser.parse_args(argv)
 
     @staticmethod
@@ -157,6 +234,11 @@ class Versioner:
         """ checks command line options """
         if args.json and args.yaml:
             print('Cannot use --json and --yaml together')
+            sys.exit(1)
+
+        if args.verify and args.verify == 'HEAD':
+            print('You cannot verify against HEAD. You must choose a hash'
+                  ' (preferably something like upstream/master)')
             sys.exit(1)
 
         if not Versioner.is_git_object(args.commit):
