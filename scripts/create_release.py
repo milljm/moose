@@ -214,13 +214,6 @@ class CreateRelease():
                                                       status.description,
                                                       status.updated_at):
                 continue
-            # This is our duplicate invalidated test. Assume 'group' status.
-            override_status = f'{"success" if final_status else "failure"}'
-            tests[status.context] = commit_status(override_status,
-                                                  status.context,
-                                                  status.target_url,
-                                                  status.description,
-                                                  status.updated_at)
 
         # return the same object type we started with
         return list(value for value in tests.values())
@@ -270,7 +263,7 @@ def get_recipe_sha(group: int, statuses: list[tuple[str: 'state',
     """
     recipe_re = re.compile(r'recipe:([0-9a-f]+),')
     groups = [statuses[:1]]
-    if statuses[1:-1] == statuses[-1:]:
+    if len(statuses) == 2:
         groups.append(statuses[-1:])
     else:
         groups.extend([statuses[1:-1], statuses[-1:]])
@@ -297,11 +290,16 @@ def get_test_groups(statuses: list[tuple[str: 'state',
     """
     groups = [statuses[:1]]
     labels = ['MAIN/MASTER:']
-    # if project only has 'PR --> MAIN'
-    if statuses[1:-1] == statuses[-1:]:
+    if len(statuses) == 1:
+        labels = ['PR']
+    # if project only has 'PR --> MAIN' (two branches)
+    if len(statuses) == 2:
+        # last group is always PRs
         groups.append(statuses[-1:])
-        labels.append('PR:')
-    else:
+        labels.append('DEVEL or PR:')
+    # project has 3 or more branches
+    elif len(statuses) > 2:
+        # everything in between is devel, next, etc
         groups.extend([statuses[1:-1], statuses[-1:]])
         labels.extend(['DEVEL/NEXT:', 'PR:'])
     return (labels, groups)
@@ -363,22 +361,23 @@ def print_statuses(statuses: list[tuple[str: 'state',
 
     # Begin to print statuses
     for label_index, group in enumerate(groups):
-        _sha = [x[0] for x in group][0].sha
-        recipe_sha = get_recipe_sha(label_index, statuses)
+        if group:
+            _sha = [x[0] for x in group][0].sha
+            recipe_sha = get_recipe_sha(label_index, statuses)
 
-        # CIVET does not record sha events for PRs
-        events = (f'\n{BOLD}CIVET Event:{RESET} {civet_url}/{_sha[:8]}\n'
-                  f'{BOLD}GitHub Event:{RESET} {github_url}/{_sha[:8]}'
-                  if 'PR' not in labels[label_index] else '')
+            # CIVET does not record sha events for PRs
+            events = (f'\n{BOLD}CIVET Event:{RESET} {civet_url}/{_sha[:8]}\n'
+                    f'{BOLD}GitHub Event:{RESET} {github_url}/{_sha[:8]}'
+                    if 'PR' not in labels[label_index] else '')
 
-        print(f'\n{BOLD}{labels[label_index]}{RESET} '
-              f'Recipe SHA: {BOLD}{recipe_sha}{RESET}{events}')
-        # transverse list[(commit, namedtuple())]
-        for meta in group:
-            (_, tests) = meta
-            for test in tests:
-                print(f'\t{GREEN if test.state == "success" else RED}{test.state}{RESET}'
-                      f' {test.context} {test.target_url}')
+            print(f'\n{BOLD}{labels[label_index]}{RESET} '
+                f'Recipe SHA: {BOLD}{recipe_sha}{RESET}{events}')
+            # transverse list[(commit, namedtuple())]
+            for meta in group:
+                (_, tests) = meta
+                for test in tests:
+                    print(f'\t{GREEN if test.state == "success" else RED}{test.state}{RESET}'
+                        f' {test.context} {test.target_url}')
 
 def check_args(argv)->object:
     """ checks command line options """
